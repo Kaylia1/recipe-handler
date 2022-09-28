@@ -9,8 +9,8 @@ CC = g++
 CFLAGS  = -c -Wall -I.
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lsfml-graphics -lsfml-window -lsfml-system
 
-SRCS = $(SRC_DIR)/ingredient.cpp $(SRC_DIR)/recipe.cpp
-OBJS = $(OBJ_DIR)/ingredient.o $(OBJ_DIR)/recipe.o
+SRCS = $(SRC_DIR)/ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/food_component.cpp
+OBJS = $(OBJ_DIR)/ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/food_component.o
 
 DEPS = $(INC_DIR)/ingredient.h $(INC_DIR)/recipe.h
 
@@ -38,3 +38,5 @@ build:
 
 clean:
 	rm -rf $(OBJS) run
+
+fresh: clean build all output
