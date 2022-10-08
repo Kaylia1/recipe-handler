@@ -6,19 +6,18 @@
 class Recipe : public FoodComponent {
   public:
     struct PortionedIngredient {
-        FoodComponent ingredient;
-        double amount;
-        std::string unit;
+        FoodComponent* ingredient;
+        std::pair<double,std::string> amt;
     };
 
     Recipe();
-    bool addIngredient(PortionedIngredient* newIngredient);
-    double calcCost(double desiredServings);
+
+    virtual double getCost(std::pair<double, std::string> desiredAmt); //for recipes that act as ingredients
+
     ~Recipe();
   private:
-    PortionedIngredient* components; // array of ingredients in a recipe
-    std::string* steps; // array of string steps
-    double servings;
+
+    std::string name;
 };
 
 #endif

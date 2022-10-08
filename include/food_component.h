@@ -1,7 +1,9 @@
-#ifndef FOOD_CMP
-#define FOOD_CMP
+#ifndef FOOD_COMP
+#define FOOD_COMP
 
 #include <map>
+
+// note: also supports "servings" and "whole" as unit
 
 // TODO put inside class as static const
 // convert A to B: A*cupEq["B"]/cupEq["A"]
@@ -24,10 +26,10 @@ const std::map<std::string, double> lbEq = {
     {"g", 450.0}
 };
 
-// TODO make abstract class
 class FoodComponent {
   public:
-    bool scale(double ratio);
+    virtual double getCost(std::pair<double, std::string> desiredAmt) = 0;
+    
 };
 
 #endif

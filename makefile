@@ -9,10 +9,10 @@ CC = g++
 CFLAGS  = -c -Wall -I.
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lsfml-graphics -lsfml-window -lsfml-system
 
-SRCS = $(SRC_DIR)/ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/food_component.cpp
-OBJS = $(OBJ_DIR)/ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/food_component.o
+SRCS = $(SRC_DIR)/ingredient.cpp $(SRC_DIR)/recipe.cpp
+OBJS = $(OBJ_DIR)/ingredient.o $(OBJ_DIR)/recipe.o
 
-DEPS = $(INC_DIR)/ingredient.h $(INC_DIR)/recipe.h
+DEPS = $(INC_DIR)/ingredient.h $(INC_DIR)/recipe.h $(INC_DIR)/food_component.h
 
 # .PHONY: all build clean
 
@@ -28,7 +28,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 # run.exe to run main
 output: $(SRC_DIR)/main.cpp $(OBJS)
-	g++ -o run $(SRC_DIR)/main.cpp $(SRCS) $(OBJS) $(LDFLAGS)
+	g++ -o run $(SRC_DIR)/main.cpp $(DEPS) $(OBJS) $(LDFLAGS)
 
 # recipe.o: recipe.cpp
 # 	g++ -c recipe.cpp

@@ -14,7 +14,7 @@ int main() {
     // Run
     while (window.isOpen())
     {
-        // Check window events
+        // Check all window events from iter
         sf::Event event;
         while (window.pollEvent(event))
         {
