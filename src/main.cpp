@@ -6,10 +6,13 @@
 
 #include "../include/recipe.h"
 #include "../include/ingredient.h"
+#include "../include/file_manager.h"
 
 int main() {
 
     sf::Window window(sf::VideoMode(800, 600), "Recipe management");
+
+    Ingredient* test = new Ingredient();
 
     // Run
     while (window.isOpen())

@@ -1,7 +1,7 @@
 #include "../include/ingredient.h"
 
 Ingredient::Ingredient(){
-    printf("testing\n");
+    // printf("testing compiler\n");
 }
 
 double Ingredient::getCost(std::pair<double, std::string> desiredAmt){

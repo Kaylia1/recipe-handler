@@ -14,7 +14,7 @@ const std::map<std::string, double> cupEq = {
     {"cup", 1.0},
     {"pint", 1.0/2.0},
     {"quart", 1.0/4.0},
-    {"gallon", 1.0/16.0},
+    {"gal", 1.0/16.0},
 
     {"mL", 250.0}
 };
