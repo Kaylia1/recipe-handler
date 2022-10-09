@@ -12,7 +12,9 @@ int main() {
 
     sf::Window window(sf::VideoMode(800, 600), "Recipe management");
 
-    Ingredient* test = new Ingredient();
+    // Ingredient* test = new Ingredient();
+    FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
+    saveData->loadIngredients();
 
     // Run
     while (window.isOpen())
@@ -27,6 +29,8 @@ int main() {
             }
         }
     }
+
+    delete saveData;
 
     return 0;
 }

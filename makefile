@@ -5,7 +5,7 @@ INC_DIR = include
 SRC_DIR = src
 OBJ_DIR = obj
 
-CC = g++
+C = g++
 CFLAGS  = -c -Wall -I.
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lsfml-graphics -lsfml-window -lsfml-system
 
@@ -27,8 +27,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 # CFLAGS=-I src:include
 
 # run.exe to run main
-output: $(SRC_DIR)/main.cpp $(OBJS)
-	g++ -o run $(SRC_DIR)/main.cpp $(DEPS) $(OBJS) $(LDFLAGS)
+output: $(SRC_DIR)/main.cpp $(OBJS) $(DEPS)
+	g++ -o run $(SRC_DIR)/main.cpp $(OBJS) $(LDFLAGS)
 
 # recipe.o: recipe.cpp
 # 	g++ -c recipe.cpp

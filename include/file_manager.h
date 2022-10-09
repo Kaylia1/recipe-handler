@@ -10,11 +10,20 @@
 #include "ingredient.h"
 #include "recipe.h"
 
+class Ingredient;
+class Recipe;
+
 class FileManager {
   public:
     FileManager(std::string ingredientPath, std::string recipePath);
     void loadIngredients();
     void loadRecipes();
+
+    void addIngredient();
+    void addRecipe();
+
+    //void saveIngredients();
+    //void saveRecipes();
     ~FileManager();
   private:
     std::string ingredientPath, recipePath;

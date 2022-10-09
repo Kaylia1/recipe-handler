@@ -29,7 +29,7 @@ const std::map<std::string, double> lbEq = {
 class FoodComponent {
   public:
     virtual double getCost(std::pair<double, std::string> desiredAmt) = 0;
-    
+    virtual ~FoodComponent(){}
 };
 
 #endif
