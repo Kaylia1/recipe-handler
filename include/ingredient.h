@@ -19,6 +19,12 @@ class Ingredient : public FoodComponent {
     void setMassUnit(std::string massUnit);
     void addAltIngredient(std::string ingredientKey);
 
+    double getCost();
+    double getAmt();
+    std::string getVolUnit();
+    double getMass();
+    std::string getMassUnit();
+    std::vector<std::string>* getAlts();
     virtual double getCost(std::pair<double, std::string> desiredAmt);
 
 

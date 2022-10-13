@@ -140,6 +140,7 @@ void FileManager::loadRecipes(){
                 // Assumes that there is not a recipe and ingredient by the same name, but if there is, would take ingredient
                 if(allIngredients.count(curStrBuff) <= 0) {
                     if(allRecipes.count(curStrBuff) <= 0) {
+                        //TODO currently replaces unknown ingredient with 0xfffff if recipe loaded and written to file
                         printf("ERROR tried to add invalid ingredient in recipe %d under name %s\n", recipeNum, curStrBuff.c_str());
                     } else { //is a recipe type
                         tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff];
@@ -148,6 +149,7 @@ void FileManager::loadRecipes(){
                     tempPortionedIngredient.ingredient = (FoodComponent*) allIngredients[curStrBuff];
                 }
 
+                // TODO should send string as key
                 tempRecipe->addIngredient(tempPortionedIngredient); // not a ptr, so shallow copy valid
             }
 
@@ -165,6 +167,66 @@ void FileManager::loadRecipes(){
         recipeFile.close();
     } else {
         printf("ERROR: loadRecipes failed, possibly path not valid.\n");
+    }
+}
+
+/**
+ * Erases current file contents and writes current data to file in given format.
+ * */
+void FileManager::writeIngredientsToFile(){
+    std::ofstream ingredientFile;
+    ingredientFile.open(ingredientPath, std::ofstream::out | std::ofstream::trunc);
+    if(ingredientFile.is_open()){
+
+        for(std::map<std::string, Ingredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
+            ingredientFile << iter->first << " " << iter->second->getCost() << " " << iter->second->getAmt() << " " << iter->second->getVolUnit(); //"\n";
+            if(iter->second->getMass() > 0.0) { //mass is known
+                ingredientFile << " " << iter->second->getMass() << " " << iter->second->getMassUnit();
+            }
+            std::vector<std::string>* alts = iter->second->getAlts();
+            if(alts->size() > 0) {
+                for(unsigned long i = 0; i<alts->size(); i++){
+                    ingredientFile << " " << alts->at(i);
+                }
+            }
+            ingredientFile << "\n";
+        }
+
+        ingredientFile.close();
+    } else {
+        printf("ERROR: writeIngredientsToFile failed, possibly path not valid.\n");
+    }
+}
+
+void FileManager::writeRecipesToFile(){
+    std::ofstream recipeFile;
+    recipeFile.open(recipePath, std::ofstream::out | std::ofstream::trunc);
+    if(recipeFile.is_open()){
+
+        for(std::map<std::string, Recipe*>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+            recipeFile << iter->first << "\n";
+            recipeFile << iter->second->getStdServings() << "\n";
+            recipeFile << "ingredients\n";
+            std::vector<Recipe::PortionedIngredient>* ingredients = iter->second->getIngredients();
+            for (int i = 0; i<ingredients->size(); i++) {
+                recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient << "\n";
+            }
+            recipeFile << "steps\n";
+            std::vector<std::string>* steps = iter->second->getSteps();
+            for (int i = 0; i<steps->size(); i++) {
+                recipeFile << steps->at(i) << "\n";
+            }
+            recipeFile << "notes\n";
+            std::vector<std::string>* notes = iter->second->getNotes();
+            for (int i = 0; i<notes->size(); i++) {
+                recipeFile << notes->at(i) << "\n";
+            }
+            recipeFile << "-----\n";
+        }
+
+        recipeFile.close();
+    } else {
+        printf("ERROR: writeRecipesToFile failed, possibly path not valid.\n");
     }
 }
 

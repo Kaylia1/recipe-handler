@@ -16,9 +16,13 @@ class Recipe;
 class FileManager {
   public:
     FileManager(std::string ingredientPath, std::string recipePath);
-    void loadIngredients();
+    void loadIngredients(); //TODO bool return val
     void loadRecipes();
 
+    void writeIngredientsToFile();
+    void writeRecipesToFile();
+
+    //TODO
     void addIngredient();
     void addRecipe();
 

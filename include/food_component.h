@@ -2,12 +2,16 @@
 #define FOOD_COMP
 
 #include <map>
+#include <string>
+#include <set>
 
 // note: also supports "servings" and "whole" as unit
 
+const std::string UNKNOWN_UNIT = "unknown";
+
 // TODO put inside class as static const
 // convert A to B: A*cupEq["B"]/cupEq["A"]
-const std::map<std::string, double> cupEq = {
+const std::map<std::string, double> CUP_EQ = {
     {"tsp", 48.0},
     {"tbsp", 16.0},
     {"floz", 8.0},
@@ -19,12 +23,13 @@ const std::map<std::string, double> cupEq = {
     {"mL", 250.0}
 };
 
-const std::map<std::string, double> lbEq = {
+const std::map<std::string, double> LB_EQ = {
     {"oz", 8.0},
     {"lb", 1.0},
 
     {"g", 450.0}
 };
+
 
 class FoodComponent {
   public:

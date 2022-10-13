@@ -15,6 +15,9 @@ int main() {
     // Ingredient* test = new Ingredient();
     FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
     saveData->loadIngredients();
+    saveData->writeIngredientsToFile();
+    saveData->loadRecipes();
+    saveData->writeRecipesToFile();
 
     // Run
     while (window.isOpen())

@@ -12,11 +12,16 @@ class Recipe : public FoodComponent {
 
     Recipe();
     void setServings(double servings);
-    void addIngredient(PortionedIngredient newPortionedIngredient);
+    void addIngredient(PortionedIngredient nextPortionedIngredient);
     void appendStep(std::string nextStep);
     void appendNote(std::string nextNote);
     void calcStdCost();
 
+    //TODO print function passing in ofstream rather than return ptr
+    double getStdServings();
+    std::vector<PortionedIngredient>* getIngredients();
+    std::vector<std::string>* getSteps();
+    std::vector<std::string>* getNotes();
     //int addStep
     //int addNote
     //int permScale
