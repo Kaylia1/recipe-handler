@@ -1,7 +1,8 @@
 #ifndef RECIPE
 #define RECIPE
 
-#include "ingredient.h"
+#include "whole_ingredient.h"
+#include "divisible_ingredient.h"
 
 class Recipe : public FoodComponent {
   public:
@@ -10,7 +11,7 @@ class Recipe : public FoodComponent {
       std::pair<double,std::string> amt; // amt and unit pair
     };
 
-    Recipe();
+    Recipe(std::string name);
     void setServings(double servings);
     void addIngredient(PortionedIngredient nextPortionedIngredient);
     void appendStep(std::string nextStep);

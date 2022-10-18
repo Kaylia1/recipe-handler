@@ -1,6 +1,6 @@
 #include "../include/recipe.h"
 
-Recipe::Recipe(){
+Recipe::Recipe(std::string name) : FoodComponent(name){
     stdServings = -1.0;
 }
 

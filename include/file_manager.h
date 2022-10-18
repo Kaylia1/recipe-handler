@@ -7,10 +7,12 @@
 #include <fstream>
 #include <sstream>
 
-#include "ingredient.h"
+#include "divisible_ingredient.h"
+#include "whole_ingredient.h"
 #include "recipe.h"
 
-class Ingredient;
+class DivisibleIngredient;
+class WholeIngredient;
 class Recipe;
 
 class FileManager {
@@ -18,7 +20,6 @@ class FileManager {
     FileManager(std::string ingredientPath, std::string recipePath);
     void loadIngredients(); //TODO bool return val
     void loadRecipes();
-
     void writeIngredientsToFile();
     void writeRecipesToFile();
 
@@ -26,12 +27,12 @@ class FileManager {
     void addIngredient();
     void addRecipe();
 
-    //void saveIngredients();
-    //void saveRecipes();
     ~FileManager();
   private:
     std::string ingredientPath, recipePath;
-    std::map<std::string, Ingredient*> allIngredients;
+
+    // currently using name as ID to prevent duplicate names, may consider numbers
+    std::map<std::string, WholeIngredient*> allIngredients;
     std::map<std::string, Recipe*> allRecipes;
 };
 

@@ -15,8 +15,12 @@ void FileManager::loadIngredients(){
     std::string curLine;
     std::string curStrBuff;
     double curDoubleBuff;
-    Ingredient* tempIngredient;
-    std::string tempKey;
+
+    WholeIngredient* tempWholeIngredient;
+    DivisibleIngredient* tempDivisibleIngredient;
+    std::string ingredientName;
+    std::string volUnit;
+    double cost, amt;
 
     ingredientFile.open (ingredientPath);
     if (ingredientFile.is_open()) {
@@ -26,37 +30,67 @@ void FileManager::loadIngredients(){
             lineNum++;
             
             std::stringstream ss(curLine);
-            ss >> tempKey;
-            if(allIngredients.count(tempKey) > 0) {
+            ss >> ingredientName;
+            if(allIngredients.count(ingredientName) > 0) {
                 printf("WARNING duplicate ingredient name at line %d in file, second ignored.\n", lineNum);
                 continue;
             }
-            tempIngredient = new Ingredient(this);
-            ss >> curDoubleBuff;
-            tempIngredient->setCost(curDoubleBuff);
-            ss >> curDoubleBuff;
-            tempIngredient->setAmt(curDoubleBuff);
-            ss >> curStrBuff;
-            tempIngredient->setVolUnit(curStrBuff);
+            // tempIngredient = new Ingredient(this, ingredientName);
+            // ss >> curDoubleBuff;
+            // tempIngredient->setCost(curDoubleBuff);
+            // ss >> curDoubleBuff;
+            // tempIngredient->setAmt(curDoubleBuff);
+            ss >> cost;
+            ss >> amt;
+            ss >> volUnit;
 
-            // mass is known
-            if(ss >> curStrBuff) {
-                //check if double, if so then weight info known
-                std::stringstream checkDouble(curStrBuff);
-                checkDouble >> curDoubleBuff;
-                if(!checkDouble.fail()) {
-                    tempIngredient->setMass(curDoubleBuff);
-                    ss >> curStrBuff;
-                    tempIngredient->setMassUnit(curStrBuff);
+            if(volUnit.compare(WHOLE_UNIT) == 0) {
+                tempWholeIngredient = new WholeIngredient(ingredientName, cost, amt);
+            } else {
+                tempDivisibleIngredient = new DivisibleIngredient(ingredientName, cost, amt, volUnit);
+                if(ss >> curStrBuff) {
+                    //check if double, if so then weight info known
+                    std::stringstream checkDouble(curStrBuff);
+                    checkDouble >> curDoubleBuff;
+                    if(!checkDouble.fail()) {
+                        tempDivisibleIngredient->setMass(curDoubleBuff);
+                        ss >> curStrBuff;
+                        tempDivisibleIngredient->setMassUnit(curStrBuff);
+                    } else {
+                        //read a value that's not a mass, must be alt
+                        tempDivisibleIngredient->addAltIngredient(curStrBuff);
+                    }
                 }
+                tempWholeIngredient = tempDivisibleIngredient;
+            }
+            
+            // alt ingredients
+            while (ss >> curStrBuff) {
+                tempWholeIngredient->addAltIngredient(curStrBuff);
+            }
+            allIngredients.insert(std::pair<std::string, WholeIngredient*>(ingredientName, tempWholeIngredient));
 
-                //alt ingredients
-                do { //curStrBuff read earlier
-                    tempIngredient->addAltIngredient(curStrBuff);
-                } while(ss >> curStrBuff);
+
+            // tempIngredient->setVolUnit(curStrBuff);
+
+            // // mass is known
+            // if(ss >> curStrBuff) {
+            //     //check if double, if so then weight info known
+            //     std::stringstream checkDouble(curStrBuff);
+            //     checkDouble >> curDoubleBuff;
+            //     if(!checkDouble.fail()) {
+            //         tempIngredient->setMass(curDoubleBuff);
+            //         ss >> curStrBuff;
+            //         tempIngredient->setMassUnit(curStrBuff);
+            //     }
+
+            //     //alt ingredients
+            //     do { //curStrBuff read earlier
+            //         tempIngredient->addAltIngredient(curStrBuff);
+            //     } while(ss >> curStrBuff);
                 
-            } // no more in ss
-            allIngredients.insert(std::pair<std::string, Ingredient*>(tempKey, tempIngredient));
+            // } // no more in ss
+            
         }
 
         // note assuming alt ingredients exist
@@ -111,7 +145,7 @@ void FileManager::loadRecipes(){
                 return;
             }
 
-            tempRecipe = new Recipe();
+            tempRecipe = new Recipe(recipeName);
 
             //servings
             if(!std::getline(recipeFile, curStrBuff)){
@@ -140,7 +174,6 @@ void FileManager::loadRecipes(){
                 // Assumes that there is not a recipe and ingredient by the same name, but if there is, would take ingredient
                 if(allIngredients.count(curStrBuff) <= 0) {
                     if(allRecipes.count(curStrBuff) <= 0) {
-                        //TODO currently replaces unknown ingredient with 0xfffff if recipe loaded and written to file
                         printf("ERROR tried to add invalid ingredient in recipe %d under name %s\n", recipeNum, curStrBuff.c_str());
                     } else { //is a recipe type
                         tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff];
@@ -149,7 +182,6 @@ void FileManager::loadRecipes(){
                     tempPortionedIngredient.ingredient = (FoodComponent*) allIngredients[curStrBuff];
                 }
 
-                // TODO should send string as key
                 tempRecipe->addIngredient(tempPortionedIngredient); // not a ptr, so shallow copy valid
             }
 
@@ -178,11 +210,17 @@ void FileManager::writeIngredientsToFile(){
     ingredientFile.open(ingredientPath, std::ofstream::out | std::ofstream::trunc);
     if(ingredientFile.is_open()){
 
-        for(std::map<std::string, Ingredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
-            ingredientFile << iter->first << " " << iter->second->getCost() << " " << iter->second->getAmt() << " " << iter->second->getVolUnit(); //"\n";
-            if(iter->second->getMass() > 0.0) { //mass is known
-                ingredientFile << " " << iter->second->getMass() << " " << iter->second->getMassUnit();
+        for(std::map<std::string, WholeIngredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
+            ingredientFile << iter->first << " " << iter->second->getCost() << " " << iter->second->getAmt();// << " " << iter->second->getVolUnit(); //"\n";
+    
+            if (dynamic_cast<DivisibleIngredient*>(iter->second)) {
+                DivisibleIngredient* tempCast = (DivisibleIngredient*) iter->second;
+                ingredientFile << " " << tempCast->getVolUnit();
+                if(tempCast->getMass() > 0.0) { //mass is known
+                    ingredientFile << " " << tempCast->getMass() << " " << tempCast->getMassUnit();
+                }
             }
+            
             std::vector<std::string>* alts = iter->second->getAlts();
             if(alts->size() > 0) {
                 for(unsigned long i = 0; i<alts->size(); i++){
@@ -208,17 +246,17 @@ void FileManager::writeRecipesToFile(){
             recipeFile << iter->second->getStdServings() << "\n";
             recipeFile << "ingredients\n";
             std::vector<Recipe::PortionedIngredient>* ingredients = iter->second->getIngredients();
-            for (int i = 0; i<ingredients->size(); i++) {
-                recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient << "\n";
+            for (unsigned long i = 0; i<ingredients->size(); i++) {
+                recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient->getName() << "\n";
             }
             recipeFile << "steps\n";
             std::vector<std::string>* steps = iter->second->getSteps();
-            for (int i = 0; i<steps->size(); i++) {
+            for (unsigned long i = 0; i<steps->size(); i++) {
                 recipeFile << steps->at(i) << "\n";
             }
             recipeFile << "notes\n";
             std::vector<std::string>* notes = iter->second->getNotes();
-            for (int i = 0; i<notes->size(); i++) {
+            for (unsigned long i = 0; i<notes->size(); i++) {
                 recipeFile << notes->at(i) << "\n";
             }
             recipeFile << "-----\n";
@@ -230,8 +268,11 @@ void FileManager::writeRecipesToFile(){
     }
 }
 
+
+
+
 FileManager::~FileManager(){
-    for(std::map<std::string, Ingredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
+    for(std::map<std::string, WholeIngredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
         delete iter->second;
     }
 

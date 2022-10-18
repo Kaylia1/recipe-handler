@@ -5,7 +5,7 @@
 #include <SFML/System.hpp>
 
 #include "../include/recipe.h"
-#include "../include/ingredient.h"
+#include "../include/whole_ingredient.h"
 #include "../include/file_manager.h"
 
 int main() {
@@ -15,8 +15,9 @@ int main() {
     // Ingredient* test = new Ingredient();
     FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
     saveData->loadIngredients();
-    saveData->writeIngredientsToFile();
     saveData->loadRecipes();
+
+    saveData->writeIngredientsToFile();
     saveData->writeRecipesToFile();
 
     // Run

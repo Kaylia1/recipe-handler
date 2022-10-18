@@ -9,10 +9,10 @@ C = g++
 CFLAGS  = -c -Wall -I.
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lsfml-graphics -lsfml-window -lsfml-system
 
-SRCS = $(SRC_DIR)/ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/file_manager.cpp
-OBJS = $(OBJ_DIR)/ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/file_manager.o
+SRCS = $(SRC_DIR)/divisible_ingredient.cpp $(SRC_DIR)/whole_ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/file_manager.cpp $(SRC_DIR)/food_component.cpp
+OBJS = $(OBJ_DIR)/divisible_ingredient.o $(OBJ_DIR)/whole_ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/file_manager.o $(OBJ_DIR)/food_component.o
 
-DEPS = $(INC_DIR)/ingredient.h $(INC_DIR)/recipe.h $(INC_DIR)/food_component.h $(INC_DIR)/file_manager.h
+DEPS = $(INC_DIR)/divisible_ingredient.h $(INC_DIR)/whole_ingredient.h $(INC_DIR)/recipe.h $(INC_DIR)/food_component.h $(INC_DIR)/file_manager.h
 
 # .PHONY: all build clean
 
