@@ -7,34 +7,29 @@
 #include "../include/recipe.h"
 #include "../include/whole_ingredient.h"
 #include "../include/file_manager.h"
+#include "../include/utility/windowControl.h"
+
+
 
 int main() {
 
-    sf::Window window(sf::VideoMode(800, 600), "Recipe management");
-
-    // Ingredient* test = new Ingredient();
     FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
     saveData->loadIngredients();
     saveData->loadRecipes();
 
+    WindowControl* winCtrl = new WindowControl();
+
+    // Run
+    while (winCtrl->isOpened()) {
+        winCtrl->update();
+    }
+
+    // must close window properly to save
     saveData->writeIngredientsToFile();
     saveData->writeRecipesToFile();
 
-    // Run
-    while (window.isOpen())
-    {
-        // Check all window events from iter
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // Close window
-            if (event.type == sf::Event::Closed){
-                window.close();
-            }
-        }
-    }
-
     delete saveData;
+    delete winCtrl;
 
     return 0;
 }

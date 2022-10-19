@@ -5,36 +5,36 @@
 #include "divisible_ingredient.h"
 
 class Recipe : public FoodComponent {
-  public:
-    struct PortionedIngredient {
-      FoodComponent* ingredient; // pointer to ingredient, shared by file_manager
-      std::pair<double,std::string> amt; // amt and unit pair
-    };
+    public:
+        struct PortionedIngredient {
+          FoodComponent* ingredient; // pointer to ingredient, shared by file_manager
+          std::pair<double,std::string> amt; // amt and unit pair
+        };
 
-    Recipe(std::string name);
-    void setServings(double servings);
-    void addIngredient(PortionedIngredient nextPortionedIngredient);
-    void appendStep(std::string nextStep);
-    void appendNote(std::string nextNote);
-    void calcStdCost();
+        Recipe(std::string name);
+        void setServings(double servings);
+        void addIngredient(PortionedIngredient nextPortionedIngredient);
+        void appendStep(std::string nextStep);
+        void appendNote(std::string nextNote);
+        double calcStdCost();
 
-    //TODO print function passing in ofstream rather than return ptr
-    double getStdServings();
-    std::vector<PortionedIngredient>* getIngredients();
-    std::vector<std::string>* getSteps();
-    std::vector<std::string>* getNotes();
-    //int addStep
-    //int addNote
-    //int permScale
+        //TODO print function passing in ofstream rather than return ptr
+        double getStdServings();
+        std::vector<PortionedIngredient>* getIngredients();
+        std::vector<std::string>* getSteps();
+        std::vector<std::string>* getNotes();
+        //int addStep
+        //int addNote
+        //int permScale
 
-    virtual double getCost(std::pair<double, std::string> desiredAmt); //for recipes that act as ingredients
+        virtual double getCost(std::pair<double, std::string> desiredAmt); //for recipes that act as ingredients
 
-    virtual ~Recipe();
-  private:
-    double stdServings;
-    std::vector<PortionedIngredient> parts;
-    std::vector<std::string> steps;
-    std::vector<std::string> notes;
+        virtual ~Recipe();
+    private:
+        double stdServings;
+        std::vector<PortionedIngredient> parts;
+        std::vector<std::string> steps;
+        std::vector<std::string> notes;
 };
 
 #endif

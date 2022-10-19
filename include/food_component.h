@@ -9,6 +9,7 @@
 
 const std::string UNKNOWN_UNIT = "unknown";
 const std::string WHOLE_UNIT = "whole";
+const std::string SERVING_UNIT = "servings";
 
 // convert A to B: A*cupEq["B"]/cupEq["A"]
 const std::map<std::string, double> CUP_EQ = {
@@ -32,13 +33,13 @@ const std::map<std::string, double> LB_EQ = {
 
 
 class FoodComponent {
-  public:
-    FoodComponent(std::string name);
-    virtual double getCost(std::pair<double, std::string> desiredAmt) = 0;
-    virtual ~FoodComponent(){}
-    std::string getName();
-  protected:
-    std::string name;
+    public:
+        FoodComponent(std::string name);
+        virtual double getCost(std::pair<double, std::string> desiredAmt) = 0;
+        virtual ~FoodComponent(){}
+        std::string getName();
+    protected:
+        std::string name;
 };
 
 #endif

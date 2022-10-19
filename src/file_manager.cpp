@@ -35,11 +35,7 @@ void FileManager::loadIngredients(){
                 printf("WARNING duplicate ingredient name at line %d in file, second ignored.\n", lineNum);
                 continue;
             }
-            // tempIngredient = new Ingredient(this, ingredientName);
-            // ss >> curDoubleBuff;
-            // tempIngredient->setCost(curDoubleBuff);
-            // ss >> curDoubleBuff;
-            // tempIngredient->setAmt(curDoubleBuff);
+            
             ss >> cost;
             ss >> amt;
             ss >> volUnit;
@@ -69,27 +65,6 @@ void FileManager::loadIngredients(){
                 tempWholeIngredient->addAltIngredient(curStrBuff);
             }
             allIngredients.insert(std::pair<std::string, WholeIngredient*>(ingredientName, tempWholeIngredient));
-
-
-            // tempIngredient->setVolUnit(curStrBuff);
-
-            // // mass is known
-            // if(ss >> curStrBuff) {
-            //     //check if double, if so then weight info known
-            //     std::stringstream checkDouble(curStrBuff);
-            //     checkDouble >> curDoubleBuff;
-            //     if(!checkDouble.fail()) {
-            //         tempIngredient->setMass(curDoubleBuff);
-            //         ss >> curStrBuff;
-            //         tempIngredient->setMassUnit(curStrBuff);
-            //     }
-
-            //     //alt ingredients
-            //     do { //curStrBuff read earlier
-            //         tempIngredient->addAltIngredient(curStrBuff);
-            //     } while(ss >> curStrBuff);
-                
-            // } // no more in ss
             
         }
 
