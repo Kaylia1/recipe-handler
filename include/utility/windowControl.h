@@ -37,6 +37,7 @@ class WindowControl {
     private:
         void initStart();
         void updateStart();
+        void updateMenu();
 
         State curState;
         sf::RenderWindow* window;
