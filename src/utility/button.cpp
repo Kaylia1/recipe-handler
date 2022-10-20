@@ -5,17 +5,23 @@ const int Button::STD_HEIGHT = 20;
 const int Button::STD_TXT_SIZE = 24;
 const sf::Color Button::STD_TXT_COLOR = sf::Color(0, 0, 0);
 const sf::Color Button::STD_BTN_COLOR = sf::Color(200, 200, 255);
-sf::Font* Button::font = nullptr; //remember to call initFonts()
+const sf::Color Button::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);
 
-Button::Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) {
-    init(name, STD_TXT_SIZE, STD_TXT_COLOR, window, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
+Button::Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
+    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
 }
 
-Button::Button(std::string name, sf::RenderWindow* window, int x, int y) {
-    init(name, STD_TXT_SIZE, STD_TXT_COLOR, window, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
+Button::Button(std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
 }
 
-void Button::init(std::string name, int txtSize, sf::Color txtColor, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor) {
+Button::Button(WindowControl* winCtrl, WindowControl::State nextState, std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR, nextState, winCtrl);
+}
+
+void Button::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
+    WindowControl::State nextState, WindowControl* winCtrl) {
+
     if(xMin > xMax) {
         int temp = xMin;
         xMin = xMax;
@@ -27,7 +33,6 @@ void Button::init(std::string name, int txtSize, sf::Color txtColor, sf::RenderW
         yMax = temp;
     }
 
-    this->name = name;
     title = new sf::Text();
     title->setString(name);
     title->setFillColor(txtColor);
@@ -38,31 +43,58 @@ void Button::init(std::string name, int txtSize, sf::Color txtColor, sf::RenderW
                                     (float)((yMin + yMax) / 2.0 - title->getLocalBounds().height)));
     
 
-    this->window = window;
+    buttonColor = btnColor;
+    hoverColor = STD_BTN_HVR_COLOR;
     rect = new sf::RectangleShape(sf::Vector2f((float) (xMax - xMin), (float) (yMax - yMin)));
-    rect->setFillColor(btnColor);
+    rect->setFillColor(buttonColor);
     rect->setPosition(sf::Vector2f((float) xMin, (float) yMin));
 
     this->xMin = xMin;
     this->yMin = yMin;
     this->xMax = xMax;
     this->yMax = yMax;
+
+    isJustPressed = false;
+    isHoveredOver = false;
+
+    this->nextState = nextState;
+    this->winCtrl = winCtrl;
 }
 
-void Button::initFonts() {
-    font = new sf::Font();
-    if(!font->loadFromFile("Sansation-Regular.ttf")) {
-        printf("ERROR failed to load font\n");
-    }
-}
 
 void Button::draw() {
     if(window == nullptr) {
         printf("ERROR window is null in button draw\n");
         return;
     }
+
+    if(!isHoveredOver) {
+        rect->setFillColor(buttonColor);
+    } else {
+        rect->setFillColor(hoverColor);
+    }
+
     window->draw(*rect);
     window->draw(*title);
+}
+
+void Button::update(sf::Event* event) {
+    isHoveredOver = checkInBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y);
+
+    if(event->type == sf::Event::MouseButtonPressed){
+        isJustPressed = isHoveredOver;
+
+        // button changes window state
+        // impossible for multiple buttons to be clicked in one iter (one mouse)
+        if(winCtrl != nullptr) {
+            winCtrl->setNextState(nextState);
+            // printf("next state set to %d\n", nextState);
+        }
+    }
+}
+
+bool Button::getIsJustPressed() {
+    return isJustPressed;
 }
 
 bool Button::checkInBounds(int x, int y) {
@@ -70,5 +102,6 @@ bool Button::checkInBounds(int x, int y) {
 }
 
 Button::~Button(){
+    delete title;
     delete rect;
 }

@@ -1,15 +1,18 @@
 #include "../../include/utility/windowControl.h"
+#include "../../include/utility/button.h"
 
 const int WindowControl::WIDTH = 800;
 const int WindowControl::HEIGHT = 600;
 
 const std::string WindowControl::START_BUTTON = "start";
+const std::string WindowControl::START_TXT = "Welcome to Recipe Manager!";
 
 WindowControl::WindowControl() {
     window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Recipe management");
     // printf("CHECKING %p\n", window);
     curState = startInit;
-    Button::initFonts();
+    nextState = main;
+    Element::initFonts();
 }
 
 /**
@@ -20,15 +23,15 @@ void WindowControl::update(){
     switch(curState) {
         case startInit:
             initStart();
-            curState = start;
             break;
-        case start:
-            updateStart();
+        case menuInit:
+            initMenu();
             break;
-        case menu:
-            updateMenu();
+        case main:
+            updateWindow();
             break;
     }
+    curState = nextState;
 }
 
 bool WindowControl::isOpened(){
@@ -36,26 +39,38 @@ bool WindowControl::isOpened(){
 }
 
 void WindowControl::initStart(){
-    buttons[START_BUTTON] = new Button(START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100);
+    clearElements();
+    elements.push_back(new SimpleText(START_TXT, window, WIDTH / 2, HEIGHT / 2 - 50));
+    elements.push_back(new Button(this, menuInit, START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100));
+    nextState = main;
 }
+
+void WindowControl::initMenu() {
+    clearElements();
+    nextState = main;
+}
+
 
 /**
  * Updates window for given state and event.
  * */
-void WindowControl::updateStart(){
+void WindowControl::updateWindow(){
 
     window->clear(sf::Color::White);
-    buttons[START_BUTTON]->draw();
+
+    for(unsigned long i = 0; i < elements.size(); i++) {
+        elements[i]->draw();
+    }
+
     window->display();
 
     sf::Event event;
     while (window->pollEvent(event))
     {
-        if (event.type == sf::Event::MouseButtonPressed){
-            if(buttons[START_BUTTON]->checkInBounds(event.mouseButton.x, event.mouseButton.y)){
-                curState = menu;
-            }
+        for(unsigned long i = 0; i < elements.size(); i++) {
+            elements[i]->update(&event);
         }
+
         // Close window
         if (event.type == sf::Event::Closed){
             window->close();
@@ -64,25 +79,18 @@ void WindowControl::updateStart(){
     
 }
 
-void WindowControl::updateMenu(){
-    window->clear(sf::Color::White);
-    //draw elements
-    window->display();
+void WindowControl::setNextState(State nextState) {
+    this->nextState = nextState;
+}
 
-    sf::Event event;
-    while (window->pollEvent(event))
-    {
-        
-        // Close window
-        if (event.type == sf::Event::Closed){
-            window->close();
-        }
+void WindowControl::clearElements() {
+    for(unsigned long i = 0; i < elements.size(); i++){
+        delete elements[i];
     }
+    elements.clear();
 }
 
 WindowControl::~WindowControl(){
     delete window;
-    for(std::map<std::string, Button*>::iterator iter = buttons.begin(); iter != buttons.end(); iter++) {
-        delete iter->second;
-    }
+    clearElements();
 }
