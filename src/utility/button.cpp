@@ -8,19 +8,28 @@ const sf::Color Button::STD_BTN_COLOR = sf::Color(200, 200, 255);
 const sf::Color Button::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);
 
 Button::Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
+    action = nullptr;
+    title = nullptr;
+    rect = nullptr;
     init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
 }
 
 Button::Button(std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+    action = nullptr;
+    title = nullptr;
+    rect = nullptr;
     init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
 }
 
-Button::Button(WindowControl* winCtrl, WindowControl::State nextState, std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
-    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR, nextState, winCtrl);
+Button::Button(WindowControl* winCtrl, void (WindowControl::*action)(), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+    this->action = action;
+    title = nullptr;
+    rect = nullptr;
+    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR, winCtrl);
 }
 
 void Button::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
-    WindowControl::State nextState, WindowControl* winCtrl) {
+    WindowControl* winCtrl) {
 
     if(xMin > xMax) {
         int temp = xMin;
@@ -33,7 +42,9 @@ void Button::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax,
         yMax = temp;
     }
 
+    delete title;
     title = new sf::Text();
+
     title->setString(name);
     title->setFillColor(txtColor);
     title->setCharacterSize(txtSize);
@@ -42,9 +53,10 @@ void Button::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax,
     title->setPosition(sf::Vector2f((float)((xMin + xMax) / 2.0 - title->getLocalBounds().width / 2.0),
                                     (float)((yMin + yMax) / 2.0 - title->getLocalBounds().height)));
     
-
     buttonColor = btnColor;
     hoverColor = STD_BTN_HVR_COLOR;
+    
+    delete rect;
     rect = new sf::RectangleShape(sf::Vector2f((float) (xMax - xMin), (float) (yMax - yMin)));
     rect->setFillColor(buttonColor);
     rect->setPosition(sf::Vector2f((float) xMin, (float) yMin));
@@ -57,7 +69,6 @@ void Button::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax,
     isJustPressed = false;
     isHoveredOver = false;
 
-    this->nextState = nextState;
     this->winCtrl = winCtrl;
 }
 
@@ -84,12 +95,18 @@ void Button::update(sf::Event* event) {
     if(event->type == sf::Event::MouseButtonPressed){
         isJustPressed = isHoveredOver;
 
-        // button changes window state
-        // impossible for multiple buttons to be clicked in one iter (one mouse)
-        if(winCtrl != nullptr) {
-            winCtrl->setNextState(nextState);
-            // printf("next state set to %d\n", nextState);
+        if (winCtrl != nullptr) {
+            (winCtrl->*action)();
         }
+
+    }
+}
+
+std::string Button::getTitle() {
+    if(title != nullptr) {
+        return title->getString().toAnsiString();
+    } else {
+        return "";
     }
 }
 

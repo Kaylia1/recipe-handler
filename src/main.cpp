@@ -10,10 +10,10 @@
 #include "../include/utility/windowControl.h"
 
 
-
 int main() {
 
     FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
+    
     saveData->loadIngredients();
     saveData->loadRecipes();
 

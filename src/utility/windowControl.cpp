@@ -9,7 +9,6 @@ const std::string WindowControl::START_TXT = "Welcome to Recipe Manager!";
 
 WindowControl::WindowControl() {
     window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Recipe management");
-    // printf("CHECKING %p\n", window);
     curState = startInit;
     nextState = main;
     Element::initFonts();
@@ -41,12 +40,13 @@ bool WindowControl::isOpened(){
 void WindowControl::initStart(){
     clearElements();
     elements.push_back(new SimpleText(START_TXT, window, WIDTH / 2, HEIGHT / 2 - 50));
-    elements.push_back(new Button(this, menuInit, START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100));
+    elements.push_back(new Button(this, &WindowControl::setMenuState, START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100));
     nextState = main;
 }
 
 void WindowControl::initMenu() {
     clearElements();
+    elements.push_back(new TextInput("searchbar", window, 100));
     nextState = main;
 }
 
@@ -79,8 +79,8 @@ void WindowControl::updateWindow(){
     
 }
 
-void WindowControl::setNextState(State nextState) {
-    this->nextState = nextState;
+void WindowControl::setMenuState() {
+    nextState = menuInit;
 }
 
 void WindowControl::clearElements() {

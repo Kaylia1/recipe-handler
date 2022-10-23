@@ -15,6 +15,8 @@ class Button;
 // #include "button.h"
 #include "element.h"
 #include "simpleText.h"
+#include "textInput.h"
+#include <iostream>
 
 
 class WindowControl {
@@ -42,7 +44,10 @@ class WindowControl {
         WindowControl();
         void update();
         bool isOpened();
-        void setNextState(State nextState);
+
+        // button methods
+        void setMenuState();
+
         ~WindowControl();
     private:
         void initStart();

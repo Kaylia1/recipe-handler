@@ -8,17 +8,21 @@
 
 class TextInput : public Element {
     public:
-        TextInput(); //todo
+        TextInput(std::string name, sf::RenderWindow* window, int y);
+        TextInput(std::string name, sf::RenderWindow* window, int minX, int minY, int maxX, int maxY);
         virtual void draw();
         virtual void update(sf::Event* event);
-        ~TextInput();
+        virtual ~TextInput();
     private:
+        void init(int minX, int minY, int maxX, int maxY);
+
         std::string curText;
         std::string showText; //todo truncate to make illusion of scrolling
         int index; //points to location where next adding character. -1 when not selected
-        int minX, minY, maxX, maxY; //todo
+        int xMin, xMax, yMin, yMax;
 
-        sf::RenderWindow* window;
+        sf::Text* text;
+        sf::RectangleShape* rect;
 };
 
 #endif

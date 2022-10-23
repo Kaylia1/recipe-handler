@@ -15,8 +15,4 @@ void Element::initFonts() {
     }
 }
 
-// bool Element::checkReadyForNextState() {
-//     return false;
-// }
-
 Element::~Element(){}

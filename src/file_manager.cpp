@@ -149,6 +149,7 @@ void FileManager::loadRecipes(){
                 // Assumes that there is not a recipe and ingredient by the same name, but if there is, would take ingredient
                 if(allIngredients.count(curStrBuff) <= 0) {
                     if(allRecipes.count(curStrBuff) <= 0) {
+                        // TODO create placeholder ingredient name, must do necessary checks to see if contains ingredient
                         printf("ERROR tried to add invalid ingredient in recipe %d under name %s\n", recipeNum, curStrBuff.c_str());
                     } else { //is a recipe type
                         tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff];

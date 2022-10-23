@@ -6,9 +6,6 @@
 #include <string>
 
 #include "element.h"
-
-// class WindowControl;
-// enum WindowControl::State : unsigned int;
 #include "windowControl.h"
 
 class Button : public Element {
@@ -21,21 +18,27 @@ class Button : public Element {
         static const sf::Color STD_BTN_COLOR;
         static const sf::Color STD_BTN_HVR_COLOR;
 
+        // typedef void (OnAction) ();
+
         Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
         Button(std::string name, sf::RenderWindow* window, int x, int y);
-        Button(WindowControl* winCtrl, WindowControl::State nextState, std::string name, sf::RenderWindow* window, int x, int y);
+        Button(WindowControl* winCtrl, void (WindowControl::*action)(), std::string name, sf::RenderWindow* window, int x, int y);
+
 
         virtual void draw();
         virtual void update(sf::Event* event);
         // virtual bool checkReadyForNextState();
 
         bool getIsJustPressed();
+        std::string getTitle();
 
         virtual ~Button();
     private:
         void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
-            WindowControl::State nextState = WindowControl::State::startInit, WindowControl* winCtrl = nullptr);
+            WindowControl* winCtrl = nullptr);
         bool checkInBounds(int x, int y);
+
+        void (WindowControl::*action) ();
 
         int xMin, yMin, xMax, yMax; //possible todo move x, y to element
         sf::RectangleShape* rect;
@@ -45,7 +48,6 @@ class Button : public Element {
 
         bool isJustPressed, isHoveredOver;
 
-        WindowControl::State nextState;
         WindowControl* winCtrl;
 
 };
