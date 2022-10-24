@@ -40,7 +40,7 @@ bool WindowControl::isOpened(){
 void WindowControl::initStart(){
     clearElements();
     elements.push_back(new SimpleText(START_TXT, window, WIDTH / 2, HEIGHT / 2 - 50));
-    elements.push_back(new Button(this, &WindowControl::setMenuState, START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100));
+    elements.push_back(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, WIDTH / 2, HEIGHT / 2 + 100));
     nextState = main;
 }
 

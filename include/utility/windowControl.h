@@ -10,13 +10,16 @@
 #include <vector>
 
 class Element;
-class Button;
+// class Button;
 
-// #include "button.h"
+#include "button.h"
+#include "button.hpp"
 #include "element.h"
 #include "simpleText.h"
 #include "textInput.h"
 #include <iostream>
+
+// template<class Actionable> class Button; 
 
 
 class WindowControl {

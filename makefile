@@ -13,9 +13,9 @@ C = g++
 CFLAGS  = -c -Wall -I.
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -lsfml-graphics -lsfml-window -lsfml-system
 
-SRCS = $(SRC_DIR)/divisible_ingredient.cpp $(SRC_DIR)/whole_ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/file_manager.cpp $(SRC_DIR)/food_component.cpp $(UTIL_SRC_DIR)/button.cpp $(UTIL_SRC_DIR)/windowControl.cpp $(UTIL_SRC_DIR)/element.cpp $(UTIL_SRC_DIR)/simpleText.cpp $(UTIL_SRC_DIR)/textInput.cpp $(UTIL_SRC_DIR)/dropdownLayout.cpp
-OBJS = $(OBJ_DIR)/divisible_ingredient.o $(OBJ_DIR)/whole_ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/file_manager.o $(OBJ_DIR)/food_component.o $(UTIL_OBJ_DIR)/button.o $(UTIL_OBJ_DIR)/windowControl.o $(UTIL_OBJ_DIR)/element.o $(UTIL_OBJ_DIR)/simpleText.o $(UTIL_OBJ_DIR)/textInput.o $(UTIL_OBJ_DIR)/dropdownLayout.o
-DEPS = $(INC_DIR)/divisible_ingredient.h $(INC_DIR)/whole_ingredient.h $(INC_DIR)/recipe.h $(INC_DIR)/food_component.h $(INC_DIR)/file_manager.h $(UTIL_INC_DIR)/button.h $(UTIL_INC_DIR)/windowControl.h $(UTIL_INC_DIR)/element.h $(UTIL_INC_DIR)/simpleText.h $(UTIL_INC_DIR)/textInput.h $(UTIL_INC_DIR)/dropdownLayout.h
+SRCS = $(SRC_DIR)/divisible_ingredient.cpp $(SRC_DIR)/whole_ingredient.cpp $(SRC_DIR)/recipe.cpp $(SRC_DIR)/file_manager.cpp $(SRC_DIR)/food_component.cpp $(UTIL_SRC_DIR)/windowControl.cpp $(UTIL_SRC_DIR)/element.cpp $(UTIL_SRC_DIR)/simpleText.cpp $(UTIL_SRC_DIR)/textInput.cpp $(UTIL_SRC_DIR)/dropdownLayout.cpp
+OBJS = $(OBJ_DIR)/divisible_ingredient.o $(OBJ_DIR)/whole_ingredient.o $(OBJ_DIR)/recipe.o $(OBJ_DIR)/file_manager.o $(OBJ_DIR)/food_component.o $(UTIL_OBJ_DIR)/windowControl.o $(UTIL_OBJ_DIR)/element.o $(UTIL_OBJ_DIR)/simpleText.o $(UTIL_OBJ_DIR)/textInput.o $(UTIL_OBJ_DIR)/dropdownLayout.o
+DEPS = $(INC_DIR)/divisible_ingredient.h $(INC_DIR)/whole_ingredient.h $(INC_DIR)/recipe.h $(INC_DIR)/food_component.h $(INC_DIR)/file_manager.h $(UTIL_INC_DIR)/button.h $(UTIL_INC_DIR)/button.hpp $(UTIL_INC_DIR)/windowControl.h $(UTIL_INC_DIR)/element.h $(UTIL_INC_DIR)/simpleText.h $(UTIL_INC_DIR)/textInput.h $(UTIL_INC_DIR)/dropdownLayout.h
 
 # .PHONY: all build clean
 

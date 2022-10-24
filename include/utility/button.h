@@ -6,9 +6,9 @@
 #include <string>
 
 #include "element.h"
-#include "windowControl.h"
+// #include "windowControl.h"
 
-class Button : public Element {
+template<class Actionable> class Button : public Element {
     public:
 
         static const int STD_WIDTH;
@@ -22,8 +22,11 @@ class Button : public Element {
 
         Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
         Button(std::string name, sf::RenderWindow* window, int x, int y);
-        Button(WindowControl* winCtrl, void (WindowControl::*action)(), std::string name, sf::RenderWindow* window, int x, int y);
 
+        // has action which is a member function
+        Button(Actionable* actionable, void (Actionable::*classAction)(), std::string name, sf::RenderWindow* window, int x, int y);
+        // has action which is a global function
+        Button(void (*action)(), std::string name, sf::RenderWindow* window, int x, int y);
 
         virtual void draw();
         virtual void update(sf::Event* event);
@@ -35,10 +38,11 @@ class Button : public Element {
         virtual ~Button();
     private:
         void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
-            WindowControl* winCtrl = nullptr);
+            Actionable* actionable = nullptr);
         bool checkInBounds(int x, int y);
 
-        void (WindowControl::*action) ();
+        void (Actionable::*classAction) ();
+        void (*action) ();
 
         int xMin, yMin, xMax, yMax; //possible todo move x, y to element
         sf::RectangleShape* rect;
@@ -48,7 +52,8 @@ class Button : public Element {
 
         bool isJustPressed, isHoveredOver;
 
-        WindowControl* winCtrl;
+        Actionable* actionable;
+        // WindowControl* winCtrl;
 
 };
 
