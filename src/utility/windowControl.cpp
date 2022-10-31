@@ -1,5 +1,4 @@
 #include "../../include/utility/windowControl.h"
-#include "../../include/utility/button.h"
 
 const int WindowControl::WIDTH = 800;
 const int WindowControl::HEIGHT = 600;
@@ -79,7 +78,7 @@ void WindowControl::updateWindow(){
     
 }
 
-void WindowControl::setMenuState() {
+void WindowControl::setMenuState(Button<WindowControl>* id) {
     nextState = menuInit;
 }
 

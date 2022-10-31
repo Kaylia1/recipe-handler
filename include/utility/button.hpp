@@ -7,21 +7,7 @@ template<class Actionable> const sf::Color Button<Actionable>::STD_TXT_COLOR = s
 template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_COLOR = sf::Color(200, 200, 255);
 template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);
 
-template<class Actionable> Button<Actionable>::Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
-    action = nullptr;
-    title = nullptr;
-    rect = nullptr;
-    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
-}
-
-template<class Actionable> Button<Actionable>::Button(std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
-    action = nullptr;
-    title = nullptr;
-    rect = nullptr;
-    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
-}
-
-template<class Actionable> Button<Actionable>::Button(Actionable* actionable, void (Actionable::*classAction)(), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+template<class Actionable> Button<Actionable>::Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
     this->classAction = classAction;
     action = nullptr;
     title = nullptr;
@@ -29,11 +15,28 @@ template<class Actionable> Button<Actionable>::Button(Actionable* actionable, vo
     init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR, actionable);
 }
 
-template<class Actionable> Button<Actionable>::Button(void (*action)(), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+template<class Actionable> Button<Actionable>::Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
+    this->classAction = classAction;
+    action = nullptr;
+    title = nullptr;
+    rect = nullptr;
+    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR, actionable);
+}
+
+template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
+    classAction = nullptr;
     this->action = action;
     title = nullptr;
     rect = nullptr;
     init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
+}
+
+template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
+    classAction = nullptr;
+    this->action = action;
+    title = nullptr;
+    rect = nullptr;
+    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
 }
 
 template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
@@ -101,12 +104,14 @@ template<class Actionable> void Button<Actionable>::update(sf::Event* event) {
     isHoveredOver = checkInBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y);
 
     if(event->type == sf::Event::MouseButtonPressed){
-        isJustPressed = isHoveredOver;
+        isJustPressed = isHoveredOver; //updates every mouse click
 
         if (actionable != nullptr) {
-            (actionable->*classAction)();
+            (actionable->*classAction)(this);
         } else if (action != nullptr) {
-            (*action)();
+            (*action)(this);
+        } else {
+            printf("Warning: nullptr action passed to button\n");
         }
 
     }

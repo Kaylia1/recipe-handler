@@ -18,19 +18,15 @@ template<class Actionable> class Button : public Element {
         static const sf::Color STD_BTN_COLOR;
         static const sf::Color STD_BTN_HVR_COLOR;
 
-        // typedef void (OnAction) ();
-
-        Button(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
-        Button(std::string name, sf::RenderWindow* window, int x, int y);
-
         // has action which is a member function
-        Button(Actionable* actionable, void (Actionable::*classAction)(), std::string name, sf::RenderWindow* window, int x, int y);
+        Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y);
+        Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
         // has action which is a global function
-        Button(void (*action)(), std::string name, sf::RenderWindow* window, int x, int y);
+        Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y);
+        Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
 
         virtual void draw();
         virtual void update(sf::Event* event);
-        // virtual bool checkReadyForNextState();
 
         bool getIsJustPressed();
         std::string getTitle();
@@ -41,10 +37,11 @@ template<class Actionable> class Button : public Element {
             Actionable* actionable = nullptr);
         bool checkInBounds(int x, int y);
 
-        void (Actionable::*classAction) ();
-        void (*action) ();
+        // calls action and passes in pointer to itself to identify which element initiated the action
+        void (Actionable::*classAction) (Button<Actionable>* id);
+        void (*action) (Button<Actionable>* id);
 
-        int xMin, yMin, xMax, yMax; //possible todo move x, y to element
+        int xMin, yMin, xMax, yMax;
         sf::RectangleShape* rect;
         sf::Text* title;
 

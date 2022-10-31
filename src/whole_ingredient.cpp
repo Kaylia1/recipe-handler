@@ -20,6 +20,7 @@ double WholeIngredient::getAmt(){
     return amt;
 }
 
+//todo have a writeToFile method so you don't do below
 std::vector<std::string>* WholeIngredient::getAlts(){
     return &altIngredients;
 }

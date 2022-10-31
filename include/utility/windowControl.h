@@ -12,8 +12,8 @@
 class Element;
 // class Button;
 
-#include "button.h"
-#include "button.hpp"
+// #include "button.h"
+#include "button.hpp" //also includes button.h
 #include "element.h"
 #include "simpleText.h"
 #include "textInput.h"
@@ -49,7 +49,7 @@ class WindowControl {
         bool isOpened();
 
         // button methods
-        void setMenuState();
+        void setMenuState(Button<WindowControl>* id);
 
         ~WindowControl();
     private:
