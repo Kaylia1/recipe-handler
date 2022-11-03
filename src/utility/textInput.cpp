@@ -60,14 +60,13 @@ void TextInput::draw() {
     window->draw(*text);
 }
 
-void TextInput::update(sf::Event* event) {
+void TextInput::update(sf::Event* event, int mouseX, int mouseY) {
 
-    int mouseX = sf::Mouse::getPosition(*window).x;
-    int mouseY = sf::Mouse::getPosition(*window).y;
-
+    //must be enabled to select, but don't need to keep mouse in window to type
+    //can unselect when not enabled
     if(event->type == sf::Event::MouseButtonPressed) {
         if(mouseX >= xMin && mouseX <= xMax && mouseY >= yMin && mouseY <= yMax){ //being selected
-            if(index < 0) {
+            if(isEnabled && index < 0) {
                 index = curText.size();
             }
         } else { //being unselected
@@ -85,6 +84,15 @@ void TextInput::update(sf::Event* event) {
         //possible todo: 127 del, arrows, enter
     }
 }
+
+// void TextInput::offset(int x, int y) {
+//     xMin += x;
+//     yMin += y;
+//     xMax += x;
+//     yMax += y;
+//     text->setPosition(sf::Vector2f(xMin, yMin));
+//     rect->setPosition(sf::Vector2f((float) xMin, (float) yMin));
+// }
 
 TextInput::~TextInput() {
 

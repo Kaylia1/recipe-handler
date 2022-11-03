@@ -8,18 +8,15 @@
 #include <string>
 #include <map>
 #include <vector>
-
-class Element;
-// class Button;
-
-// #include "button.h"
-#include "button.hpp" //also includes button.h
-#include "element.h"
-#include "simpleText.h"
-#include "textInput.h"
 #include <iostream>
 
-// template<class Actionable> class Button; 
+class Element;
+
+#include "utility/button.hpp" //also includes button.h
+#include "utility/element.h"
+#include "utility/simpleText.h"
+#include "utility/textInput.h"
+#include "utility/scrollbarLayout.h"
 
 
 class WindowControl {

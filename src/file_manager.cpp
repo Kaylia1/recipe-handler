@@ -221,17 +221,17 @@ void FileManager::writeRecipesToFile(){
             recipeFile << iter->first << "\n";
             recipeFile << iter->second->getStdServings() << "\n";
             recipeFile << "ingredients\n";
-            std::vector<Recipe::PortionedIngredient>* ingredients = iter->second->getIngredients();
+            const std::vector<Recipe::PortionedIngredient>* ingredients = iter->second->getIngredients();
             for (unsigned long i = 0; i<ingredients->size(); i++) {
                 recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient->getName() << "\n";
             }
             recipeFile << "steps\n";
-            std::vector<std::string>* steps = iter->second->getSteps();
+            const std::vector<std::string>* steps = iter->second->getSteps();
             for (unsigned long i = 0; i<steps->size(); i++) {
                 recipeFile << steps->at(i) << "\n";
             }
             recipeFile << "notes\n";
-            std::vector<std::string>* notes = iter->second->getNotes();
+            const std::vector<std::string>* notes = iter->second->getNotes();
             for (unsigned long i = 0; i<notes->size(); i++) {
                 recipeFile << notes->at(i) << "\n";
             }
@@ -244,7 +244,22 @@ void FileManager::writeRecipesToFile(){
     }
 }
 
+// void FileManager::displayRecipes(sf::RenderWindow *window) {
+//     // for(std::map<std::string, Recipe*>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+//     // //     iter->second->draw();
+        
+//     // }
+// }
 
+// void expandRecipe(Button<FileManager> *id) {
+//     unsigned long approxSize = 20 * 
+//         (5 + //5 for name, servings/cost, ingredients, steps, notes
+//         recipe->getIngredients()->size() +
+//         recipe->getSteps()->size() +
+//         recipe->getNotes()->size());
+    
+//     xMax += approxSize;
+// }
 
 
 FileManager::~FileManager(){

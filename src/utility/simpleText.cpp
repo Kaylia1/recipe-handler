@@ -21,7 +21,13 @@ void SimpleText::draw(){
     window->draw(*text);
 }
 
-void SimpleText::update(sf::Event* event){}
+void SimpleText::update(sf::Event* event, int mouseX, int mouseY){}
+
+// void SimpleText::offset(int x, int y) {
+//     minX += x;
+//     minY += y;
+//     text->setPosition(sf::Vector2f(minX, minY));
+// }
 
 SimpleText::~SimpleText() {
     delete text;

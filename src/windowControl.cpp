@@ -1,4 +1,4 @@
-#include "../../include/utility/windowControl.h"
+#include "../include/windowControl.h"
 
 const int WindowControl::WIDTH = 800;
 const int WindowControl::HEIGHT = 600;
@@ -46,6 +46,12 @@ void WindowControl::initStart(){
 void WindowControl::initMenu() {
     clearElements();
     elements.push_back(new TextInput("searchbar", window, 100));
+
+    ScrollbarLayout* scrollbar = new ScrollbarLayout("menu", window, WIDTH, HEIGHT, 100, 200, window->getSize().x - 100*2, 300, 1000);
+    elements.push_back(scrollbar);
+    
+    scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
+    
     nextState = main;
 }
 
@@ -66,14 +72,20 @@ void WindowControl::updateWindow(){
     sf::Event event;
     while (window->pollEvent(event))
     {
+        int mouseX = sf::Mouse::getPosition(*window).x;
+        int mouseY = sf::Mouse::getPosition(*window).y;
+
         for(unsigned long i = 0; i < elements.size(); i++) {
-            elements[i]->update(&event);
+            elements[i]->update(&event, mouseX, mouseY);
         }
 
         // Close window
         if (event.type == sf::Event::Closed){
             window->close();
         }
+    }
+    for(unsigned long i = 0; i < elements.size(); i++) {
+        elements[i]->update();
     }
     
 }

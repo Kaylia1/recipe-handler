@@ -38,9 +38,9 @@ void DropdownLayout::draw() {
     }
 }
 
-void DropdownLayout::update(sf::Event* event) {
+void DropdownLayout::update(sf::Event* event, int mouseX, int mouseY) {
     for(unsigned long i = 0; i < options.size(); i++) {
-        options[i].update(event);
+        options[i].update(event, mouseX, mouseY);
     }
 }
 

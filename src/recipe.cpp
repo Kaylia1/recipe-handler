@@ -1,12 +1,14 @@
 #include "../include/recipe.h"
 
 Recipe::Recipe(std::string name) : FoodComponent(name){
+    // drawElement = nullptr;
     stdServings = -1.0;
 }
 
 void Recipe::setServings(double servings){
     stdServings = servings;
 }
+
 // allows duplicate ingredients... TODO consider combining
 void Recipe::addIngredient(PortionedIngredient nextPortionedIngredient){
     parts.push_back(nextPortionedIngredient);
@@ -26,9 +28,9 @@ double Recipe::calcStdCost(){
 }
 
 double Recipe::getStdServings() {return stdServings;}
-std::vector<Recipe::PortionedIngredient>* Recipe::getIngredients() {return &parts;}
-std::vector<std::string>* Recipe::getSteps() {return &steps;}
-std::vector<std::string>* Recipe::getNotes() {return &notes;}
+const std::vector<Recipe::PortionedIngredient>* Recipe::getIngredients() {return &parts;}
+const std::vector<std::string>* Recipe::getSteps() {return &steps;}
+const std::vector<std::string>* Recipe::getNotes() {return &notes;}
 
 // for recipes that act as components to other recipes ie pie crust
 /** 
@@ -46,5 +48,11 @@ double Recipe::getCost(std::pair<double, std::string> desiredAmt){
         return -1.0;
     }
 }
+
+// void Recipe::draw() {
+//     if(drawElement != nullptr) {
+//         drawElement->draw();
+//     }
+// }
 
 Recipe::~Recipe(){}

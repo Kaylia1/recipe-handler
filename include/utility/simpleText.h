@@ -15,7 +15,8 @@ class SimpleText : public Element {
 
         SimpleText(std::string name, sf::RenderWindow* window, int x, int y, sf::Color txtClr = STD_TXT_CLR, int fontSize = STD_TXT_SIZE);
         virtual void draw();
-        virtual void update(sf::Event* event);
+        virtual void update(sf::Event* event, int mouseX, int mouseY);
+        // virtual void offset(int x, int y);
         virtual ~SimpleText();
     private:
         sf::Text* text;

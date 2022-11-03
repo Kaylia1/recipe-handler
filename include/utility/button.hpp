@@ -41,7 +41,7 @@ template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Acti
 
 template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
     Actionable* actionable) {
-
+        // printf("creating with %d %d\n", xMin, yMin);
     if(xMin > xMax) {
         int temp = xMin;
         xMin = xMax;
@@ -100,10 +100,10 @@ template<class Actionable> void Button<Actionable>::draw() {
     window->draw(*title);
 }
 
-template<class Actionable> void Button<Actionable>::update(sf::Event* event) {
-    isHoveredOver = checkInBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y);
+template<class Actionable> void Button<Actionable>::update(sf::Event* event, int mouseX, int mouseY) {
+    isHoveredOver = checkInBounds(mouseX, mouseY);
 
-    if(event->type == sf::Event::MouseButtonPressed){
+    if(isEnabled && event->type == sf::Event::MouseButtonPressed && isHoveredOver){
         isJustPressed = isHoveredOver; //updates every mouse click
 
         if (actionable != nullptr) {
@@ -117,6 +117,7 @@ template<class Actionable> void Button<Actionable>::update(sf::Event* event) {
     }
 }
 
+//todo shouldn't need this cause Element->getName()
 template<class Actionable> std::string Button<Actionable>::getTitle() {
     if(title != nullptr) {
         return title->getString().toAnsiString();

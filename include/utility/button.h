@@ -6,7 +6,6 @@
 #include <string>
 
 #include "element.h"
-// #include "windowControl.h"
 
 template<class Actionable> class Button : public Element {
     public:
@@ -26,13 +25,13 @@ template<class Actionable> class Button : public Element {
         Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
 
         virtual void draw();
-        virtual void update(sf::Event* event);
+        virtual void update(sf::Event* event, int mouseX, int mouseY);
 
         bool getIsJustPressed();
         std::string getTitle();
 
         virtual ~Button();
-    private:
+    protected:
         void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
             Actionable* actionable = nullptr);
         bool checkInBounds(int x, int y);
@@ -41,16 +40,17 @@ template<class Actionable> class Button : public Element {
         void (Actionable::*classAction) (Button<Actionable>* id);
         void (*action) (Button<Actionable>* id);
 
+
         int xMin, yMin, xMax, yMax;
         sf::RectangleShape* rect;
         sf::Text* title;
 
         sf::Color buttonColor, hoverColor;
 
-        bool isJustPressed, isHoveredOver;
+        bool isJustPressed; //whether last click was button click
+        bool isHoveredOver;
 
         Actionable* actionable;
-        // WindowControl* winCtrl;
 
 };
 

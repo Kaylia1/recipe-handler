@@ -12,6 +12,9 @@
 #include "button.hpp"
 #include "element.h"
 
+/**
+ * Currently unused.
+*/
 class DropdownLayout : public Element{
     public:
         static const int OPTION_HEIGHT;
@@ -22,10 +25,13 @@ class DropdownLayout : public Element{
         std::string getCurOption();
 
         virtual void draw();
-        virtual void update(sf::Event* event);
+        virtual void update(sf::Event* event, int mouseX, int mouseY);
 
         virtual ~DropdownLayout();
     private:
+        /**
+         * Helper for selecting a button. Unselects other buttons.
+        */
         void select(Button<DropdownLayout>* id);    
         std::vector<Button<DropdownLayout>> options;
         std::string selectedOption;

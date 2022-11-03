@@ -11,7 +11,8 @@ class TextInput : public Element {
         TextInput(std::string name, sf::RenderWindow* window, int y);
         TextInput(std::string name, sf::RenderWindow* window, int minX, int minY, int maxX, int maxY);
         virtual void draw();
-        virtual void update(sf::Event* event);
+        virtual void update(sf::Event* event, int mouseX, int mouseY);
+        // virtual void offset(int x, int y);
         virtual ~TextInput();
     private:
         void init(int minX, int minY, int maxX, int maxY);

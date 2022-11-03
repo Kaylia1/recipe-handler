@@ -7,7 +7,7 @@
 #include "../include/recipe.h"
 #include "../include/whole_ingredient.h"
 #include "../include/file_manager.h"
-#include "../include/utility/windowControl.h"
+#include "../include/windowControl.h"
 
 
 int main() {

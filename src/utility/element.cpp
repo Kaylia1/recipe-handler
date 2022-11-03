@@ -6,6 +6,13 @@ sf::Font* Element::font = nullptr; //remember to call initFonts()
 Element::Element(std::string name, sf::RenderWindow* window) {
     this->name = name;
     this->window = window;
+    isEnabled = true;
+}
+
+void Element::update(){}
+
+void Element::setEnabled(bool enabled) {
+    isEnabled = enabled;
 }
 
 void Element::initFonts() {
