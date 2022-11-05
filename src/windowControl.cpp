@@ -36,6 +36,10 @@ bool WindowControl::isOpened(){
     return window != nullptr && window->isOpen();
 }
 
+sf::RenderWindow* WindowControl::getWindow() {
+    return window;
+}
+
 void WindowControl::initStart(){
     clearElements();
     elements.push_back(new SimpleText(START_TXT, window, WIDTH / 2, HEIGHT / 2 - 50));
@@ -50,8 +54,11 @@ void WindowControl::initMenu() {
     ScrollbarLayout* scrollbar = new ScrollbarLayout("menu", window, WIDTH, HEIGHT, 100, 200, window->getSize().x - 100*2, 300, 1000);
     elements.push_back(scrollbar);
     
-    scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
+    // scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
+    // printf("did i create fm?%s\n", FileManager::getFileManager());
     
+    FileManager::getFileManager()->displayRecipesInit(0, scrollbar->translateInnerElementY(100));
+    scrollbar->addInnerElement(FileManager::getFileManager());
     nextState = main;
 }
 

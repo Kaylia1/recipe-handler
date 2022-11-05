@@ -17,6 +17,7 @@ class Element;
 #include "utility/simpleText.h"
 #include "utility/textInput.h"
 #include "utility/scrollbarLayout.h"
+#include "file_manager.h"
 
 
 class WindowControl {
@@ -45,6 +46,8 @@ class WindowControl {
         void update();
         bool isOpened();
 
+        sf::RenderWindow* getWindow();
+
         // button methods
         void setMenuState(Button<WindowControl>* id);
 
@@ -59,8 +62,6 @@ class WindowControl {
         State curState, nextState;
         sf::RenderWindow* window;
 
-        //TODO make into vector, don't really need to know id of elements
-        // std::map<std::string, Element*> elements;
         std::vector<Element*> elements;
 };
 

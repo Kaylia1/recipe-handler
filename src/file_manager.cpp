@@ -1,6 +1,21 @@
 #include "../include/file_manager.h"
 
-FileManager::FileManager(std::string ingredientPath, std::string recipePath) {
+FileManager* FileManager::fileManager = nullptr;
+
+FileManager* FileManager::newFileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath){
+    if(fileManager == nullptr) {
+        fileManager = new FileManager(window, ingredientPath, recipePath);
+    }
+    return fileManager;
+}
+
+FileManager* FileManager::getFileManager() {
+    return fileManager;
+}
+
+FileManager::FileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath)
+    : Element("General Manager", window){
+
     this->ingredientPath = ingredientPath;
     this->recipePath = recipePath;
 }
@@ -40,7 +55,9 @@ void FileManager::loadIngredients(){
             ss >> amt;
             ss >> volUnit;
 
+            // printf("cur vol unit is %s\n", volUnit);
             if(volUnit.compare(WHOLE_UNIT) == 0) {
+                // std::cout << ingredientName << std::endl;
                 tempWholeIngredient = new WholeIngredient(ingredientName, cost, amt);
             } else {
                 tempDivisibleIngredient = new DivisibleIngredient(ingredientName, cost, amt, volUnit);
@@ -152,7 +169,7 @@ void FileManager::loadRecipes(){
                         // TODO create placeholder ingredient name, must do necessary checks to see if contains ingredient
                         printf("ERROR tried to add invalid ingredient in recipe %d under name %s\n", recipeNum, curStrBuff.c_str());
                     } else { //is a recipe type
-                        tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff];
+                        tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff].first;
                     }
                 } else { //is an ingredient type
                     tempPortionedIngredient.ingredient = (FoodComponent*) allIngredients[curStrBuff];
@@ -170,7 +187,11 @@ void FileManager::loadRecipes(){
             }
 
             tempRecipe->calcStdCost();
-            allRecipes.insert(std::pair<std::string, Recipe*>(recipeName, tempRecipe));
+
+            //init nullptr recipedisplays
+            allRecipes.insert(std::pair<std::string, std::pair<Recipe*, RecipeDisplay*>>(recipeName, std::pair<Recipe*, RecipeDisplay*>(tempRecipe, nullptr)));
+
+            // printf("writing a recipe!\n");
         }
         recipeFile.close();
     } else {
@@ -189,12 +210,15 @@ void FileManager::writeIngredientsToFile(){
         for(std::map<std::string, WholeIngredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
             ingredientFile << iter->first << " " << iter->second->getCost() << " " << iter->second->getAmt();// << " " << iter->second->getVolUnit(); //"\n";
     
+            //if it is a divisible ingredient
             if (dynamic_cast<DivisibleIngredient*>(iter->second)) {
                 DivisibleIngredient* tempCast = (DivisibleIngredient*) iter->second;
                 ingredientFile << " " << tempCast->getVolUnit();
                 if(tempCast->getMass() > 0.0) { //mass is known
                     ingredientFile << " " << tempCast->getMass() << " " << tempCast->getMassUnit();
                 }
+            } else { //whole ingredient
+                ingredientFile << " " << WHOLE_UNIT;
             }
             
             std::vector<std::string>* alts = iter->second->getAlts();
@@ -217,21 +241,21 @@ void FileManager::writeRecipesToFile(){
     recipeFile.open(recipePath, std::ofstream::out | std::ofstream::trunc);
     if(recipeFile.is_open()){
 
-        for(std::map<std::string, Recipe*>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+        for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
             recipeFile << iter->first << "\n";
-            recipeFile << iter->second->getStdServings() << "\n";
+            recipeFile << iter->second.first->getStdServings() << "\n";
             recipeFile << "ingredients\n";
-            const std::vector<Recipe::PortionedIngredient>* ingredients = iter->second->getIngredients();
+            const std::vector<Recipe::PortionedIngredient>* ingredients = iter->second.first->getIngredients();
             for (unsigned long i = 0; i<ingredients->size(); i++) {
                 recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient->getName() << "\n";
             }
             recipeFile << "steps\n";
-            const std::vector<std::string>* steps = iter->second->getSteps();
+            const std::vector<std::string>* steps = iter->second.first->getSteps();
             for (unsigned long i = 0; i<steps->size(); i++) {
                 recipeFile << steps->at(i) << "\n";
             }
             recipeFile << "notes\n";
-            const std::vector<std::string>* notes = iter->second->getNotes();
+            const std::vector<std::string>* notes = iter->second.first->getNotes();
             for (unsigned long i = 0; i<notes->size(); i++) {
                 recipeFile << notes->at(i) << "\n";
             }
@@ -244,30 +268,51 @@ void FileManager::writeRecipesToFile(){
     }
 }
 
-// void FileManager::displayRecipes(sf::RenderWindow *window) {
-//     // for(std::map<std::string, Recipe*>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-//     // //     iter->second->draw();
-        
-//     // }
-// }
+void FileManager::displayRecipesInit(int centerX, int startY) {
+    // printf("%s", allRecipes);
+    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+        //init recipeDisplays
+        if(iter->second.second == nullptr && iter->second.first != nullptr) {
+            //todo get rid of magic number
+            printf("creating a recipedisplay! y start being %d\n", startY);
+            iter->second.second = new RecipeDisplay(window, iter->second.first, centerX - 200, startY, 400);
+            startY += RecipeDisplay::TITLE_HEIGHT * 2; //2x spacing
+        }    
+    }
+}
 
-// void expandRecipe(Button<FileManager> *id) {
-//     unsigned long approxSize = 20 * 
-//         (5 + //5 for name, servings/cost, ingredients, steps, notes
-//         recipe->getIngredients()->size() +
-//         recipe->getSteps()->size() +
-//         recipe->getNotes()->size());
-    
-//     xMax += approxSize;
-// }
+void FileManager::draw() {
+    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+        //recipeDisplay exists
+        if(iter->second.second != nullptr) {
+            iter->second.second->draw(); //2x spacing
+        }
+    }
+}
 
+void FileManager::update(sf::Event* event, int mouseX, int mouseY) {
+    int curOffset = 0;
+    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+        //recipeDisplay exists
+        if(iter->second.second != nullptr) {
+            iter->second.second->shiftYVal(curOffset);
+            iter->second.second->update(event, mouseX, mouseY); //2x spacing
+            // if(iter->second.second->getChanged() == RecipeDisplay::expanded) {
+            curOffset += iter->second.second->getExtraHeight();
+            // } else if(iter->second.second->getChanged() == RecipeDisplay::minimized){
+                // curOffset -= iter->second.second->getExtraHeight();
+            // }
+        }    
+    }
+}
 
 FileManager::~FileManager(){
     for(std::map<std::string, WholeIngredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
         delete iter->second;
     }
 
-    for(std::map<std::string, Recipe*>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-        delete iter->second;
+    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+        delete iter->second.first;
+        delete iter->second.second;
     }
 }

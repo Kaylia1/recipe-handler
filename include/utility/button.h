@@ -30,6 +30,9 @@ template<class Actionable> class Button : public Element {
         bool getIsJustPressed();
         std::string getTitle();
 
+        void setTitle(std::string newTitle);
+        void changeSize(int xMin, int yMin, int xMax, int yMax);
+
         virtual ~Button();
     protected:
         void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
@@ -44,6 +47,7 @@ template<class Actionable> class Button : public Element {
         int xMin, yMin, xMax, yMax;
         sf::RectangleShape* rect;
         sf::Text* title;
+        float titleX, titleY;
 
         sf::Color buttonColor, hoverColor;
 

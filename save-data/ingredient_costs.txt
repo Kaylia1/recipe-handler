@@ -1,2 +1,11 @@
-butter 3.5 2 cup oil
+bakingSoda 0.8 94 tsp
+butter 4 2 cup oil
+chocolateChip 2.5 2 cup
+cocoaPowder 2.8 1.9 cup
+egg 3.8 18 whole
+flour 2.4 18 cup
+lightBrownSugar 2 4.66 cup
 milk 3 1 gal
+salt 0.6 129.6 tsp
+sugar 2.9 9 cup
+vanillaExtract 6 12 tsp

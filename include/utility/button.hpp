@@ -1,3 +1,6 @@
+#ifndef BUTTON_IMPLEMENTATION
+#define BUTTON_IMPLEMENTATION
+
 #include "button.h"
 
 template<class Actionable> const int Button<Actionable>::STD_WIDTH = 50;
@@ -61,8 +64,9 @@ template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color 
     title->setCharacterSize(txtSize);
     title->setFont(*font);
     // center text on button
-    title->setPosition(sf::Vector2f((float)((xMin + xMax) / 2.0 - title->getLocalBounds().width / 2.0),
-                                    (float)((yMin + yMax) / 2.0 - title->getLocalBounds().height)));
+    titleX = (xMin + xMax) / 2.0 - title->getLocalBounds().width / 2.0;
+    titleY = (yMin + yMax) / 2.0 - title->getLocalBounds().height;
+    title->setPosition(sf::Vector2f(titleX, titleY));
     
     buttonColor = btnColor;
     hoverColor = STD_BTN_HVR_COLOR;
@@ -95,6 +99,8 @@ template<class Actionable> void Button<Actionable>::draw() {
     } else {
         rect->setFillColor(hoverColor);
     }
+    rect->setSize(sf::Vector2f((float) (xMax - xMin), (float) (yMax - yMin)));
+    rect->setPosition(sf::Vector2f((float) xMin, (float) yMin));
 
     window->draw(*rect);
     window->draw(*title);
@@ -117,7 +123,10 @@ template<class Actionable> void Button<Actionable>::update(sf::Event* event, int
     }
 }
 
-//todo shouldn't need this cause Element->getName()
+template<class Actionable> void Button<Actionable>::setTitle(std::string newTitle) {
+    title->setString(newTitle);
+}
+
 template<class Actionable> std::string Button<Actionable>::getTitle() {
     if(title != nullptr) {
         return title->getString().toAnsiString();
@@ -130,6 +139,19 @@ template<class Actionable> bool Button<Actionable>::getIsJustPressed() {
     return isJustPressed;
 }
 
+template<class Actionable> void Button<Actionable>::changeSize(int xMin, int yMin, int xMax, int yMax) {
+    int offsetX = xMin - this->xMin;
+    int offsetY = yMin - this->yMin;
+    this->xMin = xMin;
+    this->xMax = xMax;
+    this->yMin = yMin;
+    this->yMax = yMax;
+
+    titleX += offsetX;
+    titleY += offsetY;
+    title->setPosition(sf::Vector2f(titleX, titleY));
+}
+
 template<class Actionable> bool Button<Actionable>::checkInBounds(int x, int y) {
     return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
 }
@@ -138,3 +160,5 @@ template<class Actionable> Button<Actionable>::~Button(){
     delete title;
     delete rect;
 }
+
+#endif

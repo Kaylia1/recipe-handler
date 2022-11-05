@@ -11,13 +11,14 @@
 
 
 int main() {
+    
+    WindowControl* winCtrl = new WindowControl();
 
-    FileManager* saveData = new FileManager("./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
+    FileManager* saveData = FileManager::newFileManager(winCtrl->getWindow(), "./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
     
     saveData->loadIngredients();
     saveData->loadRecipes();
 
-    WindowControl* winCtrl = new WindowControl();
 
     // Run
     while (winCtrl->isOpened()) {
