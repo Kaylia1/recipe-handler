@@ -1,4 +1,4 @@
-double-chocolate chip cookies
+cookies
 45
 ingredients
 2.5 cup flour
@@ -17,7 +17,7 @@ Bake 350 degrees F for 14 min
 notes
 little expansion
 -----
-scallion pancakes
+test
 36
 ingredients
 10 cup milk

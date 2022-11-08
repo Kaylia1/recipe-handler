@@ -1,4 +1,4 @@
-#include "../include/divisible_ingredient.h"
+#include "../include/divisibleIngredient.h"
 
 DivisibleIngredient::DivisibleIngredient(std::string name, double cost, double amt, std::string volUnit)
     : WholeIngredient(name, cost, amt){

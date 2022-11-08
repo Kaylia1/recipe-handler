@@ -18,7 +18,9 @@ template<class Actionable> class Button : public Element {
         static const sf::Color STD_BTN_HVR_COLOR;
 
         // has action which is a member function
+        // centered button of standard size
         Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y);
+        // custom size and location
         Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax);
         // has action which is a global function
         Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y);

@@ -20,7 +20,7 @@ class ScrollbarLayout : public Element {
         //warning does not check if element goes out of window size
         float translateInnerElementX(int xRelative);
         float translateInnerElementY(int yRelative);
-        void addInnerElement(Element *element);
+        void addInnerElement(Element *element, bool delWhenDone = true);
         //TODO add functionality for relative coords
 
         virtual void draw();
@@ -50,7 +50,7 @@ class ScrollbarLayout : public Element {
 
         int width;
 
-        std::vector<Element*> innerElements; //vector of inner element ptrs
+        std::vector<std::pair<Element*, bool>> innerElements; //vector of inner element ptrs
 
         sf::RectangleShape *scrollbar, *innerBackground;
         sf::View* view;

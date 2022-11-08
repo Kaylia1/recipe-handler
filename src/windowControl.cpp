@@ -49,7 +49,7 @@ void WindowControl::initStart(){
 
 void WindowControl::initMenu() {
     clearElements();
-    elements.push_back(new TextInput("searchbar", window, 100));
+    elements.push_back(new RecipeTextInput("searchbar", window, 100));
 
     ScrollbarLayout* scrollbar = new ScrollbarLayout("menu", window, WIDTH, HEIGHT, 100, 200, window->getSize().x - 100*2, 300, 1000);
     elements.push_back(scrollbar);
@@ -57,8 +57,8 @@ void WindowControl::initMenu() {
     // scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
     // printf("did i create fm?%s\n", FileManager::getFileManager());
     
-    FileManager::getFileManager()->displayRecipesInit(0, scrollbar->translateInnerElementY(100));
-    scrollbar->addInnerElement(FileManager::getFileManager());
+    FileManager::getFileManager()->displayRecipesInit(0, scrollbar->translateInnerElementY(50));
+    scrollbar->addInnerElement(FileManager::getFileManager(), false);
     nextState = main;
 }
 
@@ -76,6 +76,10 @@ void WindowControl::updateWindow(){
 
     window->display();
 
+    for(unsigned long i = 0; i < elements.size(); i++) {
+        elements[i]->update();
+    }
+
     sf::Event event;
     while (window->pollEvent(event))
     {
@@ -89,11 +93,10 @@ void WindowControl::updateWindow(){
         // Close window
         if (event.type == sf::Event::Closed){
             window->close();
+            break;
         }
     }
-    for(unsigned long i = 0; i < elements.size(); i++) {
-        elements[i]->update();
-    }
+    
     
 }
 

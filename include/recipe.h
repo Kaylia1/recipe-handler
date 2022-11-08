@@ -1,8 +1,8 @@
 #ifndef RECIPE
 #define RECIPE
 
-#include "whole_ingredient.h"
-#include "divisible_ingredient.h"
+#include "wholeIngredient.h"
+#include "divisibleIngredient.h"
 #include "utility/element.h"
 
 class Recipe : public FoodComponent {

@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "food_component.h"
+#include "foodComponent.h"
 // #include "recipe.h"
 
 class FileManager;

@@ -1,4 +1,4 @@
-#include "../include/whole_ingredient.h"
+#include "../include/wholeIngredient.h"
 
 WholeIngredient::WholeIngredient(std::string name, double cost, double amt) : FoodComponent(name){
     this->cost = cost;

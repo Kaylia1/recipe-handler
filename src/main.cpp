@@ -5,8 +5,8 @@
 #include <SFML/System.hpp>
 
 #include "../include/recipe.h"
-#include "../include/whole_ingredient.h"
-#include "../include/file_manager.h"
+#include "../include/wholeIngredient.h"
+#include "../include/fileManager.h"
 #include "../include/windowControl.h"
 
 

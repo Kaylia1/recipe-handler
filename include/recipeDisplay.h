@@ -12,7 +12,7 @@
 */
 class RecipeDisplay : public Element {
     public:
-        static const int TITLE_HEIGHT = 20;
+        static const int TITLE_HEIGHT = 27;
 
         enum StateChange {
             none,

@@ -23,6 +23,7 @@ class DropdownLayout : public Element{
         DropdownLayout(std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, std::string preloadedOptions[], int numLoad);
         void addOption(std::string opt);
         std::string getCurOption();
+        void clear();
 
         virtual void draw();
         virtual void update(sf::Event* event, int mouseX, int mouseY);
@@ -33,7 +34,7 @@ class DropdownLayout : public Element{
          * Helper for selecting a button. Unselects other buttons.
         */
         void select(Button<DropdownLayout>* id);    
-        std::vector<Button<DropdownLayout>> options;
+        std::vector<Button<DropdownLayout>*> options;
         std::string selectedOption;
 
         int xMin, yMin, xMax;

@@ -12,12 +12,16 @@ class TextInput : public Element {
         TextInput(std::string name, sf::RenderWindow* window, int minX, int minY, int maxX, int maxY);
         virtual void draw();
         virtual void update(sf::Event* event, int mouseX, int mouseY);
+
+        std::string getEnteredText();
         // virtual void offset(int x, int y);
         virtual ~TextInput();
-    private:
+    protected:
         void init(int minX, int minY, int maxX, int maxY);
+        virtual void mouseClick(int mouseX, int mouseY);
 
         std::string curText;
+        std::string enteredText;
         std::string showText; //todo truncate to make illusion of scrolling
         int index; //points to location where next adding character. -1 when not selected
         int xMin, xMax, yMin, yMax;

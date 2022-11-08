@@ -17,7 +17,8 @@ class Element;
 #include "utility/simpleText.h"
 #include "utility/textInput.h"
 #include "utility/scrollbarLayout.h"
-#include "file_manager.h"
+#include "recipeTextInput.h"
+#include "fileManager.h"
 
 
 class WindowControl {

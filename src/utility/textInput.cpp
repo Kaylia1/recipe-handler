@@ -65,24 +65,34 @@ void TextInput::update(sf::Event* event, int mouseX, int mouseY) {
     //must be enabled to select, but don't need to keep mouse in window to type
     //can unselect when not enabled
     if(event->type == sf::Event::MouseButtonPressed) {
-        if(mouseX >= xMin && mouseX <= xMax && mouseY >= yMin && mouseY <= yMax){ //being selected
-            if(isEnabled && index < 0) {
-                index = curText.size();
-            }
-        } else { //being unselected
-            index = -1;
-        }
+        mouseClick(mouseX, mouseY);
         //todo: support selecting text in middle of string, would need to know font character widths
     } else if(index >= 0 && event->type == sf::Event::TextEntered && event->text.unicode < 128) { // text entered and selected
         if(index > 0 && event->text.unicode == 8) { //backspace and curText not empty
             curText.erase(index - 1, 1);
             index--;
-        } else {
+        } else if(event->text.unicode == 13){ //enter
+            enteredText = curText;
+        } else if(event->text.unicode >= 32){ //must be text character
             curText += static_cast<char>(event->text.unicode);
             index++;
         }
         //possible todo: 127 del, arrows, enter
     }
+}
+
+void TextInput::mouseClick(int mouseX, int mouseY) {
+    if(mouseX >= xMin && mouseX <= xMax && mouseY >= yMin && mouseY <= yMax){ //being selected
+        if(isEnabled && index < 0) {
+            index = curText.size();
+        }
+    } else { //being unselected
+        index = -1;
+    }
+}
+
+std::string TextInput::getEnteredText(){
+    return enteredText;
 }
 
 // void TextInput::offset(int x, int y) {
@@ -95,5 +105,6 @@ void TextInput::update(sf::Event* event, int mouseX, int mouseY) {
 // }
 
 TextInput::~TextInput() {
-
+    delete text;
+    delete rect;
 }

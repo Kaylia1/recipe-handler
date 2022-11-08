@@ -14,12 +14,12 @@ RecipeDisplay::RecipeDisplay(sf::RenderWindow *window, Recipe* recipe, int xMin,
 
     display = new Button<RecipeDisplay>(this, &RecipeDisplay::activate, recipe->getName(), window, xMin, yMin, xMax, yMax);
 
-    expandedSize = TITLE_HEIGHT * 1.35 *
+    expandedSize = TITLE_HEIGHT *
         (5 + //5 for name, servings/cost, ingredients, steps, notes
         recipe->getIngredients()->size() +
         recipe->getSteps()->size() +
         recipe->getNotes()->size());
-    printf("expanded size for %s is %d\n", recipe->getName().c_str(), expandedSize);
+    // printf("expanded size for %s is %d\n", recipe->getName().c_str(), expandedSize);
 
     std::stringstream newTitle;
     newTitle << recipe->getName() << "\nServings: " << recipe->getStdServings()

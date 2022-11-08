@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "whole_ingredient.h"
+#include "wholeIngredient.h"
 // #include "recipe.h"
 
 class WholeIngredient;

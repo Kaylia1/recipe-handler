@@ -99,6 +99,7 @@ template<class Actionable> void Button<Actionable>::draw() {
     } else {
         rect->setFillColor(hoverColor);
     }
+
     rect->setSize(sf::Vector2f((float) (xMax - xMin), (float) (yMax - yMin)));
     rect->setPosition(sf::Vector2f((float) xMin, (float) yMin));
 

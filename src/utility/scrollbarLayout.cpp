@@ -50,8 +50,8 @@ float ScrollbarLayout::translateInnerElementY(int yRelative) {
     return yRelative - showLayoutSize / 2.0f;
 }
 
-void ScrollbarLayout::addInnerElement(Element* element) {
-    innerElements.push_back(element);
+void ScrollbarLayout::addInnerElement(Element* element, bool delWhenDone) {
+    innerElements.push_back(std::pair<Element*, bool>(element, delWhenDone));
 }
 
 void ScrollbarLayout::draw() {
@@ -72,7 +72,7 @@ void ScrollbarLayout::draw() {
     window->draw(*innerBackground);
     for(unsigned long i = 0; i < innerElements.size(); i++) {
         // printf("drawing inner?\n");
-        innerElements[i]->draw();
+        innerElements[i].first->draw();
     }
     window->setView(window->getDefaultView());
 }
@@ -99,8 +99,8 @@ void ScrollbarLayout::update(sf::Event* event, int mouseX, int mouseY) {
     float ty = mouseY - yMin - showLayoutSize / 2.0f + showYMin * 1.0f * actualLayoutSize / showLayoutSize;
     
     for(unsigned long i = 0; i < innerElements.size(); i++) {
-        innerElements[i]->setEnabled(valid);
-        innerElements[i]->update(event, tx, ty);
+        innerElements[i].first->setEnabled(valid);
+        innerElements[i].first->update(event, tx, ty);
     }
 }
 
@@ -119,7 +119,7 @@ void ScrollbarLayout::update() {
     }
     // if(checkInWinBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
     for(unsigned long i = 0; i < innerElements.size(); i++) {
-        innerElements[i]->update();
+        innerElements[i].first->update();
     }
     // }
 }
@@ -143,6 +143,8 @@ ScrollbarLayout::~ScrollbarLayout(){
 
     //scrollbar layout trusted to manage inner elements, assumed it is not shared anywhere else
     for(unsigned long i = 0; i < innerElements.size(); i++) {
-        delete innerElements[i];
+        if(innerElements[i].second) {
+            delete innerElements[i].first;
+        }
     }
 }

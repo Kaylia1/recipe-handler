@@ -1,4 +1,4 @@
-#include "../include/food_component.h"
+#include "../include/foodComponent.h"
 
 FoodComponent::FoodComponent(std::string name) {
     this->name = name;

@@ -1,4 +1,4 @@
-#include "../include/file_manager.h"
+#include "../include/fileManager.h"
 
 FileManager* FileManager::fileManager = nullptr;
 
@@ -132,8 +132,8 @@ void FileManager::loadRecipes(){
                 printf("WARNING file still open but no more recipes to read by %d\n", recipeNum);
                 return;
             }
-            if(allRecipes.count(recipeName) > 0) { // key already exists, fail
-                printf("WARNING %s duplicate key so recipe %d failed to add. Did you edit the file format?\n", recipeName.c_str(), recipeNum);
+            if(checkContainsRecipeName(recipeName) >= 0) { // key already exists, fail
+                printf("WARNING %s duplicate recipe so recipe %d failed to add. Did you edit the file format?\n", recipeName.c_str(), recipeNum);
                 return;
             }
 
@@ -165,11 +165,12 @@ void FileManager::loadRecipes(){
 
                 // Assumes that there is not a recipe and ingredient by the same name, but if there is, would take ingredient
                 if(allIngredients.count(curStrBuff) <= 0) {
-                    if(allRecipes.count(curStrBuff) <= 0) {
+                    int index = checkContainsRecipeName(curStrBuff);
+                    if(index < 0) { //recipe acting as ingredient
                         // TODO create placeholder ingredient name, must do necessary checks to see if contains ingredient
                         printf("ERROR tried to add invalid ingredient in recipe %d under name %s\n", recipeNum, curStrBuff.c_str());
                     } else { //is a recipe type
-                        tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[curStrBuff].first;
+                        tempPortionedIngredient.ingredient = (FoodComponent*) allRecipes[index].first;
                     }
                 } else { //is an ingredient type
                     tempPortionedIngredient.ingredient = (FoodComponent*) allIngredients[curStrBuff];
@@ -189,7 +190,7 @@ void FileManager::loadRecipes(){
             tempRecipe->calcStdCost();
 
             //init nullptr recipedisplays
-            allRecipes.insert(std::pair<std::string, std::pair<Recipe*, RecipeDisplay*>>(recipeName, std::pair<Recipe*, RecipeDisplay*>(tempRecipe, nullptr)));
+            allRecipes.push_back(std::pair<Recipe*, RecipeDisplay*>(std::pair<Recipe*, RecipeDisplay*>(tempRecipe, nullptr)));
 
             // printf("writing a recipe!\n");
         }
@@ -241,21 +242,21 @@ void FileManager::writeRecipesToFile(){
     recipeFile.open(recipePath, std::ofstream::out | std::ofstream::trunc);
     if(recipeFile.is_open()){
 
-        for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-            recipeFile << iter->first << "\n";
-            recipeFile << iter->second.first->getStdServings() << "\n";
+        for(unsigned long i = 0; i<allRecipes.size(); i++){
+            recipeFile << allRecipes[i].first->getName() << "\n";
+            recipeFile << allRecipes[i].first->getStdServings() << "\n";
             recipeFile << "ingredients\n";
-            const std::vector<Recipe::PortionedIngredient>* ingredients = iter->second.first->getIngredients();
+            const std::vector<Recipe::PortionedIngredient>* ingredients = allRecipes[i].first->getIngredients();
             for (unsigned long i = 0; i<ingredients->size(); i++) {
                 recipeFile << ingredients->at(i).amt.first << " " << ingredients->at(i).amt.second << " " << ingredients->at(i).ingredient->getName() << "\n";
             }
             recipeFile << "steps\n";
-            const std::vector<std::string>* steps = iter->second.first->getSteps();
+            const std::vector<std::string>* steps = allRecipes[i].first->getSteps();
             for (unsigned long i = 0; i<steps->size(); i++) {
                 recipeFile << steps->at(i) << "\n";
             }
             recipeFile << "notes\n";
-            const std::vector<std::string>* notes = iter->second.first->getNotes();
+            const std::vector<std::string>* notes = allRecipes[i].first->getNotes();
             for (unsigned long i = 0; i<notes->size(); i++) {
                 recipeFile << notes->at(i) << "\n";
             }
@@ -270,35 +271,32 @@ void FileManager::writeRecipesToFile(){
 
 void FileManager::displayRecipesInit(int centerX, int startY) {
     // printf("%s", allRecipes);
-    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
+    for(unsigned long i = 0; i<allRecipes.size(); i++){
         //init recipeDisplays
-        if(iter->second.second == nullptr && iter->second.first != nullptr) {
+        if(allRecipes[i].second == nullptr && allRecipes[i].first != nullptr) {
             //todo get rid of magic number
-            printf("creating a recipedisplay! y start being %d\n", startY);
-            iter->second.second = new RecipeDisplay(window, iter->second.first, centerX - 200, startY, 400);
+            allRecipes[i].second = new RecipeDisplay(window, allRecipes[i].first, centerX - 200, startY, 400);
             startY += RecipeDisplay::TITLE_HEIGHT * 2; //2x spacing
         }    
     }
 }
 
 void FileManager::draw() {
-    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-        //recipeDisplay exists
-        if(iter->second.second != nullptr) {
-            iter->second.second->draw(); //2x spacing
+    for(unsigned long i = 0; i<allRecipes.size(); i++){        //recipeDisplay exists
+        if(allRecipes[i].second != nullptr) {
+            allRecipes[i].second->draw(); //2x spacing
         }
     }
 }
 
 void FileManager::update(sf::Event* event, int mouseX, int mouseY) {
     int curOffset = 0;
-    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-        //recipeDisplay exists
-        if(iter->second.second != nullptr) {
-            iter->second.second->shiftYVal(curOffset);
-            iter->second.second->update(event, mouseX, mouseY); //2x spacing
+    for(unsigned long i = 0; i<allRecipes.size(); i++){         //recipeDisplay exists
+        if(allRecipes[i].second != nullptr) {
+            allRecipes[i].second->shiftYVal(curOffset);
+            allRecipes[i].second->update(event, mouseX, mouseY); //2x spacing
             // if(iter->second.second->getChanged() == RecipeDisplay::expanded) {
-            curOffset += iter->second.second->getExtraHeight();
+            curOffset += allRecipes[i].second->getExtraHeight();
             // } else if(iter->second.second->getChanged() == RecipeDisplay::minimized){
                 // curOffset -= iter->second.second->getExtraHeight();
             // }
@@ -306,13 +304,39 @@ void FileManager::update(sf::Event* event, int mouseX, int mouseY) {
     }
 }
 
+int FileManager::checkContainsRecipeName(std::string recipeName) {
+    for(unsigned long i = 0; i < allRecipes.size(); i++) {
+        if(recipeName.compare(allRecipes[i].first->getName()) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+FileManager::RecipeHolder FileManager::getMostSimilarName(std::string name) {
+    // printf("finding for %s\n", name.c_str());
+    if(allRecipes.size() == 0) {
+        printf("Warning: no similar name\n");
+    }
+    std::vector<RecipeHolder> compareTest(allRecipes.size());
+    for(unsigned long i = 0; i < allRecipes.size(); i++) {
+        compareTest[i].recipe = allRecipes[i].first;
+        compareTest[i].index = i;
+        compareTest[i].similarityScore = levenshteinDistance(name, allRecipes[i].first->getName());
+    }
+    std::sort(compareTest.begin(), compareTest.end());
+    // printf("check still valid %s\n", allRecipes[0].first->getName().c_str());
+    return compareTest[0];
+}
+
+
 FileManager::~FileManager(){
     for(std::map<std::string, WholeIngredient*>::iterator iter = allIngredients.begin(); iter != allIngredients.end(); iter++) {
         delete iter->second;
     }
 
-    for(std::map<std::string, std::pair<Recipe*, RecipeDisplay*>>::iterator iter = allRecipes.begin(); iter != allRecipes.end(); iter++) {
-        delete iter->second.first;
-        delete iter->second.second;
+    for(unsigned long i = 0; i < allRecipes.size(); i++) {
+        delete allRecipes[i].first;
+        delete allRecipes[i].second;
     }
 }
