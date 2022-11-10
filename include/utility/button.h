@@ -15,7 +15,7 @@ template<class Actionable> class Button : public Element {
         static const int STD_TXT_SIZE;
         static const sf::Color STD_TXT_COLOR;
         static const sf::Color STD_BTN_COLOR;
-        static const sf::Color STD_BTN_HVR_COLOR;
+        // static const sf::Color STD_BTN_HVR_COLOR;
 
         // has action which is a member function
         // centered button of standard size
@@ -34,13 +34,14 @@ template<class Actionable> class Button : public Element {
 
         void setTitle(std::string newTitle);
         void changeSize(int xMin, int yMin, int xMax, int yMax);
+        void setColor(sf::Color baseColor);
         
         // int getMinY() const;
 
         virtual ~Button();
     protected:
-        void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
-            Actionable* actionable = nullptr);
+        void init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax,
+            sf::Color btnColor = STD_BTN_COLOR, Actionable* actionable = nullptr);
         bool checkInBounds(int x, int y);
 
         // calls action and passes in pointer to itself to identify which element initiated the action

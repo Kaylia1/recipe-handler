@@ -8,7 +8,7 @@ template<class Actionable> const int Button<Actionable>::STD_HEIGHT = 20;
 template<class Actionable> const int Button<Actionable>::STD_TXT_SIZE = 24;
 template<class Actionable> const sf::Color Button<Actionable>::STD_TXT_COLOR = sf::Color(0, 0, 0);
 template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_COLOR = sf::Color(200, 200, 255);
-template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);
+// template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);
 
 template<class Actionable> Button<Actionable>::Button(Actionable* actionable, void (Actionable::*classAction)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int x, int y) : Element(name, window){
     this->classAction = classAction;
@@ -31,7 +31,7 @@ template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Acti
     this->action = action;
     title = nullptr;
     rect = nullptr;
-    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2, STD_BTN_COLOR);
+    init(STD_TXT_SIZE, STD_TXT_COLOR, x - STD_WIDTH / 2, y - STD_HEIGHT / 2, x + STD_WIDTH / 2, y + STD_WIDTH / 2);
 }
 
 template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Actionable>* id), std::string name, sf::RenderWindow* window, int xMin, int yMin, int xMax, int yMax) : Element(name, window){
@@ -39,7 +39,7 @@ template<class Actionable> Button<Actionable>::Button(void (*action)(Button<Acti
     this->action = action;
     title = nullptr;
     rect = nullptr;
-    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax, STD_BTN_COLOR);
+    init(STD_TXT_SIZE, STD_TXT_COLOR, xMin, yMin, xMax, yMax);
 }
 
 template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color txtColor, int xMin, int yMin, int xMax, int yMax, sf::Color btnColor,
@@ -68,8 +68,9 @@ template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color 
     titleY = (yMin + yMax) / 2.0 - title->getLocalBounds().height;
     title->setPosition(sf::Vector2f(titleX, titleY));
     
-    buttonColor = btnColor;
-    hoverColor = STD_BTN_HVR_COLOR;
+    // buttonColor = btnColor;
+    // hoverColor = STD_BTN_HVR_COLOR;
+    setColor(btnColor);
     
     delete rect;
     rect = new sf::RectangleShape(sf::Vector2f((float) (xMax - xMin), (float) (yMax - yMin)));
@@ -87,6 +88,10 @@ template<class Actionable> void Button<Actionable>::init(int txtSize, sf::Color 
     this->actionable = actionable;
 }
 
+template<class Actionable> void Button<Actionable>::setColor(sf::Color baseColor) {
+    buttonColor = baseColor;
+    hoverColor = sf::Color(baseColor.r - 20, baseColor.g - 20, baseColor.b - 20);
+}
 
 template<class Actionable> void Button<Actionable>::draw() {
     if(window == nullptr) {

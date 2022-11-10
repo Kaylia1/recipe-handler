@@ -323,7 +323,7 @@ FileManager::RecipeHolder FileManager::getMostSimilarName(std::string name) {
         compareTest[i].recipe = allRecipes[i].first;
         compareTest[i].display = allRecipes[i].second;
         compareTest[i].index = i;
-        compareTest[i].similarityScore = levenshteinDistance(name, allRecipes[i].first->getName());
+        compareTest[i].similarityScore = autoSuggestScore(name, allRecipes[i].first->getName()); //levenshteinDistance(name, allRecipes[i].first->getName());
     }
     std::sort(compareTest.begin(), compareTest.end());
     // printf("check still valid %s\n", allRecipes[0].first->getName().c_str());

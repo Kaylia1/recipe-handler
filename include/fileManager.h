@@ -67,9 +67,9 @@ class FileManager : public Element {
         int checkContainsRecipeName(std::string recipeName);
 
         //todo next commit
-        // recipeTextInput calls scrollbar to move down
         // incorporate auto-fill with string similarity, now "co" is considered more similar to "test" than "cookies"
-        // button colors so it's less ugly
+        // add new recipes
+        // display ingredients
 
         //todo return ptr to vector so can return null? if none similar enough found, should also be able to rank similarity
         RecipeHolder getMostSimilarName(std::string name);

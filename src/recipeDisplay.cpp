@@ -13,6 +13,7 @@ RecipeDisplay::RecipeDisplay(sf::RenderWindow *window, Recipe* recipe, int xMin,
     this->yMax = yMin + TITLE_HEIGHT;
 
     display = new Button<RecipeDisplay>(this, &RecipeDisplay::activate, recipe->getName(), window, xMin, yMin, xMax, yMax);
+    display->setColor(sf::Color(255, 230, 230));
 
     expandedSize = TITLE_HEIGHT *
         (5 + //5 for name, servings/cost, ingredients, steps, notes

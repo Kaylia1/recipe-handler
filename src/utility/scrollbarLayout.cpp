@@ -27,7 +27,7 @@ ScrollbarLayout::ScrollbarLayout(std::string name, sf::RenderWindow* window, int
     scrollbar->setPosition(sf::Vector2f((float) (xMin + width - SCROLL_BAR_WIDTH), (float) (yMin + showYMin)));
 
     innerBackground = new sf::RectangleShape(sf::Vector2f((float)width - SCROLL_BAR_WIDTH, (float)actualLayoutSize));
-    innerBackground->setFillColor(sf::Color(240, 240, 240));
+    innerBackground->setFillColor(sf::Color(250, 250, 250));
     innerBackground->setPosition(sf::Vector2f((-width - SCROLL_BAR_WIDTH) / 2.0f, -showLayoutSize / 2.0f));
 
     view = new sf::View(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(width - SCROLL_BAR_WIDTH, height));

@@ -17,6 +17,7 @@ DropdownLayout::DropdownLayout(std::string name, sf::RenderWindow* window, int x
     for(int i = 0; i < numLoaded; i++) {
         options.push_back(new Button<DropdownLayout>(this, &DropdownLayout::select, preloadedOptions[i], window,
             xMin, yMin + i * OPTION_HEIGHT, xMax, yMin + (i + 1) * OPTION_HEIGHT));
+        options[i]->setColor(sf::Color(240, 240, 240));
     }
 }
 
@@ -26,6 +27,7 @@ void DropdownLayout::clear() {
 
 void DropdownLayout::addOption(std::string opt) {
     options.push_back(new Button<DropdownLayout>(this, &DropdownLayout::select, opt, window, xMin, yMin + options.size() * OPTION_HEIGHT, xMax, yMin + (options.size() + 1) * OPTION_HEIGHT));
+    options[options.size() - 1]->setColor(sf::Color(240, 240, 240));
     // options.push_back(new Button<DropdownLayout>(this, &DropdownLayout::select, opt, window, 0, 0, 500, 500));
 }
 
