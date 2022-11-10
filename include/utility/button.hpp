@@ -157,6 +157,11 @@ template<class Actionable> bool Button<Actionable>::checkInBounds(int x, int y) 
     return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
 }
 
+// template<class Actionable> int Button<Actionable>::getMinY() const {
+//     return yMin;
+// }
+
+
 template<class Actionable> Button<Actionable>::~Button(){
     delete title;
     delete rect;

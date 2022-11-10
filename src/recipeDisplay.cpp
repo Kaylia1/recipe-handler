@@ -43,6 +43,10 @@ void RecipeDisplay::shiftYVal(int offset) {
     display->changeSize(xMin, yMin, xMax, yMax);
 }
 
+int RecipeDisplay::getMinY() {
+    return yMin;
+}
+
 //id == display
 void RecipeDisplay::activate(Button<RecipeDisplay>* id) {
     // printf("activating!\n");

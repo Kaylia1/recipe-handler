@@ -20,6 +20,7 @@ class ScrollbarLayout : public Element {
         //warning does not check if element goes out of window size
         float translateInnerElementX(int xRelative);
         float translateInnerElementY(int yRelative);
+        float decodeInnerElementY(int yRelative);
         void addInnerElement(Element *element, bool delWhenDone = true);
         //TODO add functionality for relative coords
 
@@ -27,11 +28,14 @@ class ScrollbarLayout : public Element {
         virtual void update(sf::Event* event, int mouseX, int mouseY);
         virtual void update(); //once
 
+        void moveToWindowY(int y);
+
         virtual ~ScrollbarLayout();
     private:
+        void setMinY(int yMin);
         bool checkInBounds(int x, int y);
         bool checkInWinBounds(int x, int y);
-        void updateInnerElementOffsets();
+        // void updateInnerElementOffsets();
 
         bool isDragging;
 

@@ -26,6 +26,7 @@ class RecipeDisplay : public Element {
 
         void activate(Button<RecipeDisplay>* id);
         void shiftYVal(int offset);
+        int getMinY();
         double getExtraHeight();
         StateChange getChanged();
 

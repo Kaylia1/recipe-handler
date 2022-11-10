@@ -321,6 +321,7 @@ FileManager::RecipeHolder FileManager::getMostSimilarName(std::string name) {
     std::vector<RecipeHolder> compareTest(allRecipes.size());
     for(unsigned long i = 0; i < allRecipes.size(); i++) {
         compareTest[i].recipe = allRecipes[i].first;
+        compareTest[i].display = allRecipes[i].second;
         compareTest[i].index = i;
         compareTest[i].similarityScore = levenshteinDistance(name, allRecipes[i].first->getName());
     }

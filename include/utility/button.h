@@ -34,6 +34,8 @@ template<class Actionable> class Button : public Element {
 
         void setTitle(std::string newTitle);
         void changeSize(int xMin, int yMin, int xMax, int yMax);
+        
+        // int getMinY() const;
 
         virtual ~Button();
     protected:

@@ -24,6 +24,7 @@ class DropdownLayout : public Element{
         void addOption(std::string opt);
         std::string getCurOption();
         void clear();
+        bool getSelected();
 
         virtual void draw();
         virtual void update(sf::Event* event, int mouseX, int mouseY);
@@ -38,6 +39,7 @@ class DropdownLayout : public Element{
         std::string selectedOption;
 
         int xMin, yMin, xMax;
+        bool isSelected; //something selected
 };
 
 #endif

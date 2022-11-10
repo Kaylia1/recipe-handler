@@ -30,11 +30,18 @@ void DropdownLayout::addOption(std::string opt) {
 }
 
 void DropdownLayout::select(Button<DropdownLayout>* id) {
+    isSelected = true;
+    // printf("selected\n");
     selectedOption = id->getTitle();
 }
 
-std::string DropdownLayout::getCurOption() {
-    return selectedOption;
+bool DropdownLayout::getSelected() {
+    return isSelected;
+}
+
+std::string DropdownLayout::getCurOption() { //true max once per update, updates each update
+// printf("I am %d\n", isSelected);
+    return (isSelected)? selectedOption : "";
 }
 
 //todo visual queue to see what is selected, possibly add drop down option
@@ -46,6 +53,8 @@ void DropdownLayout::draw() {
 }
 
 void DropdownLayout::update(sf::Event* event, int mouseX, int mouseY) {
+    // printf("unselected\n");
+    isSelected = false;
     for(unsigned long i = 0; i < options.size(); i++) {
         options[i]->update(event, mouseX, mouseY);
     }

@@ -49,10 +49,14 @@ void WindowControl::initStart(){
 
 void WindowControl::initMenu() {
     clearElements();
-    elements.push_back(new RecipeTextInput("searchbar", window, 100));
+
+    RecipeTextInput *temp = new RecipeTextInput("searchbar", window, 100);
+    elements.push_back(temp);
 
     ScrollbarLayout* scrollbar = new ScrollbarLayout("menu", window, WIDTH, HEIGHT, 100, 200, window->getSize().x - 100*2, 300, 1000);
     elements.push_back(scrollbar);
+    
+    temp->setScrollbarLayout(scrollbar);
     
     // scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
     // printf("did i create fm?%s\n", FileManager::getFileManager());

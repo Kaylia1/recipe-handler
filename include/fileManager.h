@@ -36,6 +36,7 @@ class FileManager : public Element {
     public:
         struct RecipeHolder {
             Recipe* recipe;
+            RecipeDisplay* display;
             int index;
             int similarityScore;
             bool operator < (const RecipeHolder& a) const {

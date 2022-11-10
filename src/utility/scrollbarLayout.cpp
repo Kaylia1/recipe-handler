@@ -50,8 +50,27 @@ float ScrollbarLayout::translateInnerElementY(int yRelative) {
     return yRelative - showLayoutSize / 2.0f;
 }
 
+float ScrollbarLayout::decodeInnerElementY(int yRelative) {
+    return yRelative + showLayoutSize / 2.0f;
+}
+
 void ScrollbarLayout::addInnerElement(Element* element, bool delWhenDone) {
     innerElements.push_back(std::pair<Element*, bool>(element, delWhenDone));
+}
+
+void ScrollbarLayout::moveToWindowY(int y) {
+    setMinY(y * showLayoutSize / actualLayoutSize);
+}
+
+void ScrollbarLayout::setMinY(int yMin){
+    showYMin = yMin;
+
+    if(showYMin > showLayoutSize - scrollbarHeight) {
+        showYMin = showLayoutSize - scrollbarHeight;
+    } else if (showYMin < 0) {
+        showYMin = 0;
+    }
+    view->setCenter(0.0f, showYMin*1.0f*actualLayoutSize/showLayoutSize);// + actualLayoutSize / 2.0f);
 }
 
 void ScrollbarLayout::draw() {
@@ -108,14 +127,7 @@ void ScrollbarLayout::update() {
     // printf("norm update!\n");
     if(isDragging) {
         // printf("dragging %d\n", showYMin);
-        showYMin = sf::Mouse::getPosition(*window).y - yMin - mouseDragOffset;
-
-        if(showYMin > showLayoutSize - scrollbarHeight) {
-            showYMin = showLayoutSize - scrollbarHeight;
-        } else if (showYMin < 0) {
-            showYMin = 0;
-        }
-        view->setCenter(0.0f, showYMin*1.0f*actualLayoutSize/showLayoutSize);// + actualLayoutSize / 2.0f);
+        setMinY(sf::Mouse::getPosition(*window).y - yMin - mouseDragOffset);
     }
     // if(checkInWinBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
     for(unsigned long i = 0; i < innerElements.size(); i++) {
@@ -124,9 +136,9 @@ void ScrollbarLayout::update() {
     // }
 }
 
-void ScrollbarLayout::updateInnerElementOffsets(){
+// void ScrollbarLayout::updateInnerElementOffsets(){
 
-}
+// }
 
 bool ScrollbarLayout::checkInBounds(int x, int y) {
     return x >= (xMin + width - SCROLL_BAR_WIDTH) && x <= (xMin + width) && y >= yMin + showYMin && y <= yMin + scrollbarHeight + showYMin;
