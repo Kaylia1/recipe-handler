@@ -15,23 +15,39 @@ RecipeDisplay::RecipeDisplay(sf::RenderWindow *window, Recipe* recipe, int xMin,
     display = new Button<RecipeDisplay>(this, &RecipeDisplay::activate, recipe->getName(), window, xMin, yMin, xMax, yMax);
     display->setColor(sf::Color(255, 230, 230));
 
-    expandedSize = TITLE_HEIGHT *
-        (5 + //5 for name, servings/cost, ingredients, steps, notes
+    // expandedSize = TITLE_HEIGHT *
+    //     (5 + //5 for name, servings/cost, ingredients, steps, notes
+    //     recipe->getIngredients()->size() +
+    //     recipe->getSteps()->size() +
+    //     recipe->getNotes()->size());
+
+    expandedSize = TITLE_HEIGHT + LINE_HEIGHT *
+        (8 + //db space of servings/cost, ingredients, steps, notes
         recipe->getIngredients()->size() +
         recipe->getSteps()->size() +
         recipe->getNotes()->size());
-    // printf("expanded size for %s is %d\n", recipe->getName().c_str(), expandedSize);
 
     std::stringstream newTitle;
-    newTitle << recipe->getName() << "\nServings: " << recipe->getStdServings()
-        << "\nIngredients:\n" << listIngredients()
-        << "Steps:\n" << listSteps()
-        << "Notes:\n" << listNotes();
+    newTitle << "Servings: " << recipe->getStdServings()
+        << "\n\nIngredients:\n" << listIngredients()
+        << "\nSteps:\n" << listSteps()
+        << "\nNotes:\n" << listNotes();
     expandedText = newTitle.str();
+
+    mainText = new sf::Text();
+
+    mainText->setString(expandedText);
+    mainText->setFillColor(sf::Color::Black);
+    mainText->setCharacterSize(12); //magic num
+    mainText->setFont(*font);
+    mainText->setPosition(sf::Vector2f(xMin, yMin + TITLE_HEIGHT));
 }
 
 void RecipeDisplay::draw(){
     display->draw();
+    if(isExpanded) {
+        window->draw(*mainText);
+    }
 }
 
 void RecipeDisplay::update(sf::Event *event, int mouseX, int mouseY) {
@@ -41,6 +57,7 @@ void RecipeDisplay::update(sf::Event *event, int mouseX, int mouseY) {
 void RecipeDisplay::shiftYVal(int offset) {
     yMin += offset;
     yMax += offset;
+    mainText->setPosition(sf::Vector2f(xMin, yMin + TITLE_HEIGHT));
     display->changeSize(xMin, yMin, xMax, yMax);
 }
 
@@ -55,14 +72,14 @@ void RecipeDisplay::activate(Button<RecipeDisplay>* id) {
     if(!isExpanded) { //expand
         yMax = yMin + expandedSize;
         id->changeSize(xMin, yMin, xMax, yMax);
-        id->setTitle(expandedText);
+        // id->setTitle(expandedText);
         justChanged = expanded;
         isExpanded = true;
     } else { //minimize
         // printf("minimizing!\n");
         yMax = yMin + TITLE_HEIGHT;
         id->changeSize(xMin, yMin, xMax, yMax);
-        id->setTitle(recipe->getName());
+        // id->setTitle(recipe->getName());
         justChanged = minimized;
         isExpanded = false;
     }
@@ -123,4 +140,5 @@ std::string RecipeDisplay::listNotes() {
 
 RecipeDisplay::~RecipeDisplay(){
     delete display;
+    delete mainText;
 }

@@ -67,21 +67,17 @@ class FileManager : public Element {
         int checkContainsRecipeName(std::string recipeName);
 
         //todo next commit
-        // incorporate auto-fill with string similarity, now "co" is considered more similar to "test" than "cookies"
         // add new recipes
+        // what if ingredient doesnt cur exist
         // display ingredients
+        // arrow keys and dashed line for searchbar
+        // use shared pointers and unique ptrs get rid of scrollbar sketchy shared ptrs
 
         //todo return ptr to vector so can return null? if none similar enough found, should also be able to rank similarity
         RecipeHolder getMostSimilarName(std::string name);
 
         ~FileManager();
     private:
-        // class Compare {
-        //     public:
-        //         bool operator() (std::pair<Recipe*, int> a, std::pair<Recipe*, int> b) {
-        //             return levenshteinDistance(a.first->getName(), getFileManager()->referenceName.first->getName()) < levenshteinDistance(a.first->getName(), getFileManager()->referenceName.first->getName());
-        //         }
-        // };
 
         static FileManager* fileManager;
         FileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath);

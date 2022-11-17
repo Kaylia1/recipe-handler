@@ -5,7 +5,7 @@
 
 template<class Actionable> const int Button<Actionable>::STD_WIDTH = 50;
 template<class Actionable> const int Button<Actionable>::STD_HEIGHT = 20;
-template<class Actionable> const int Button<Actionable>::STD_TXT_SIZE = 24;
+template<class Actionable> const int Button<Actionable>::STD_TXT_SIZE = 18;
 template<class Actionable> const sf::Color Button<Actionable>::STD_TXT_COLOR = sf::Color(0, 0, 0);
 template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_COLOR = sf::Color(200, 200, 255);
 // template<class Actionable> const sf::Color Button<Actionable>::STD_BTN_HVR_COLOR = sf::Color(180, 180, 235);

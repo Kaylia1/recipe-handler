@@ -14,10 +14,24 @@ void Recipe::addIngredient(PortionedIngredient nextPortionedIngredient){
     parts.push_back(nextPortionedIngredient);
 }
 void Recipe::appendStep(std::string nextStep){
-    steps.push_back(nextStep);
+    if(nextStep.size() > MAX_LINE_LEN) {
+        for(int i = 0; i < nextStep.size(); i+= MAX_LINE_LEN) {
+            //if last str partition is longer, substr gives as many chars as exist
+            steps.push_back(nextStep.substr(i, MAX_LINE_LEN));
+        }
+    } else {
+        steps.push_back(nextStep);
+    }
 }
 void Recipe::appendNote(std::string nextNote){
-    notes.push_back(nextNote);
+    if(nextNote.size() > MAX_LINE_LEN) {
+        for(int i = 0; i < nextNote.size(); i+= MAX_LINE_LEN) {
+            //if last str partition is longer, substr gives as many chars as exist
+            notes.push_back(nextNote.substr(i, MAX_LINE_LEN));
+        }
+    } else {
+        notes.push_back(nextNote);
+    }
 }
 double Recipe::calcStdCost(){
     double totalCost = 0.0;

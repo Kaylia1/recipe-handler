@@ -7,6 +7,8 @@
 
 class Recipe : public FoodComponent {
     public:
+        static const int MAX_LINE_LEN = 75; //in chars
+
         struct PortionedIngredient {
             FoodComponent* ingredient; // pointer to ingredient, shared by file_manager
             std::pair<double,std::string> amt; // amt and unit pair

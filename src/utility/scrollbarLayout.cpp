@@ -13,6 +13,7 @@ ScrollbarLayout::ScrollbarLayout(std::string name, sf::RenderWindow* window, int
     // actualLayoutSize = height;
     actualLayoutSize = realHeight;
     showLayoutSize = height;
+    // printf("show lay size is %d\n", showLayoutSize);
     showYMin = 0;
     this->width = width;
 
@@ -36,17 +37,19 @@ ScrollbarLayout::ScrollbarLayout(std::string name, sf::RenderWindow* window, int
 //because drawing at 0,0 in viewport is center rather than top left
 float ScrollbarLayout::translateInnerElementX(int xRelative) {
     if(xRelative >= width) {
-        printf("Warning: would add offscreen element to Scrollbar\n");
+        printf("Warning: would add offscreen element to Scrollbar, width is %d\n", width);
     }
     return xRelative - width / 2.0f;
 }
 
+//todo fix
 float ScrollbarLayout::translateInnerElementY(int yRelative) {
     // if(yRelative >= actualLayoutSize) {
     //     actualLayoutSize = yRelative; // todo + element height
     //     scrollbarHeight = showLayoutSize / actualLayoutSize;
     //     scrollbar->setSize(sf::Vector2f((float) (SCROLL_BAR_WIDTH), (float)(scrollbarHeight)));
     // }
+    // printf("%f returning while show lay size was %d\n", yRelative - showLayoutSize / 2.0f, showLayoutSize);
     return yRelative - showLayoutSize / 2.0f;
 }
 

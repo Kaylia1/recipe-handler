@@ -13,6 +13,7 @@
 class RecipeDisplay : public Element {
     public:
         static const int TITLE_HEIGHT = 27;
+        static const int LINE_HEIGHT = 13;
 
         enum StateChange {
             none,
@@ -43,6 +44,7 @@ class RecipeDisplay : public Element {
         std::string listNotes();
 
         Recipe* recipe;
+        sf::Text* mainText;
 
         int xMin, xMax, yMin, yMax;
         bool isExpanded;

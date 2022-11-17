@@ -5,6 +5,7 @@ const int WindowControl::HEIGHT = 600;
 
 const std::string WindowControl::START_BUTTON = "start";
 const std::string WindowControl::START_TXT = "Welcome to Recipe Manager!";
+const std::string WindowControl::ADD_RECIPE = "New recipe";
 
 WindowControl::WindowControl() {
     window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Recipe management");
@@ -24,6 +25,9 @@ void WindowControl::update(){
             break;
         case menuInit:
             initMenu();
+            break;
+        case editRecipeInit:
+            initEditRecipe();
             break;
         case main:
             updateWindow();
@@ -58,14 +62,22 @@ void WindowControl::initMenu() {
     
     temp->setScrollbarLayout(scrollbar);
     
-    // scrollbar->addInnerElement(new Button<WindowControl>(this, &WindowControl::setMenuState, START_BUTTON, window, 0, scrollbar->translateInnerElementY(500)));
-    // printf("did i create fm?%s\n", FileManager::getFileManager());
-    
     FileManager::getFileManager()->displayRecipesInit(0, scrollbar->translateInnerElementY(50));
     scrollbar->addInnerElement(FileManager::getFileManager(), false);
+
+    elements.push_back(new Button<WindowControl>(this, &WindowControl::setEditRecipeState, ADD_RECIPE, window, WIDTH - 175, HEIGHT - 175, WIDTH - 75, HEIGHT - 75));
     nextState = main;
 }
 
+
+void WindowControl::initEditRecipe() {
+    clearElements();
+
+    elements.push_back(new RecipeEditor(window, WIDTH, HEIGHT));
+    //todo create recipe editor class
+
+    nextState = main;
+}
 
 /**
  * Updates window for given state and event.
@@ -106,6 +118,10 @@ void WindowControl::updateWindow(){
 
 void WindowControl::setMenuState(Button<WindowControl>* id) {
     nextState = menuInit;
+}
+
+void WindowControl::setEditRecipeState(Button<WindowControl>* id) {
+    nextState = editRecipeInit;
 }
 
 void WindowControl::clearElements() {

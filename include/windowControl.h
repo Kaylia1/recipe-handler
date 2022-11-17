@@ -19,24 +19,21 @@ class Element;
 #include "utility/scrollbarLayout.h"
 #include "recipeTextInput.h"
 #include "fileManager.h"
+#include "recipeEditor.h"
 
 
 class WindowControl {
     public:
 
         static const int WIDTH, HEIGHT;
-        static const std::string START_BUTTON, START_TXT;
+        static const std::string START_BUTTON, START_TXT, ADD_RECIPE;
 
         // todo
         enum State {
             startInit,
             menuInit,
-
-            search,
-            displayRecipe,
-            displayIngredient,
-            newRecipe,
-            newIngredient,
+            editRecipeInit,
+            
             editRecipe,
             editIngredient,
 
@@ -51,11 +48,13 @@ class WindowControl {
 
         // button methods
         void setMenuState(Button<WindowControl>* id);
+        void setEditRecipeState(Button<WindowControl>* id);
 
         ~WindowControl();
     private:
         void initStart();
         void initMenu();
+        void initEditRecipe();
 
         void updateWindow();
         void clearElements();
