@@ -57,8 +57,8 @@ float ScrollbarLayout::decodeInnerElementY(int yRelative) {
     return yRelative + showLayoutSize / 2.0f;
 }
 
-void ScrollbarLayout::addInnerElement(Element* element, bool delWhenDone) {
-    innerElements.push_back(std::pair<Element*, bool>(element, delWhenDone));
+void ScrollbarLayout::addInnerElement(std::shared_ptr<Element> element) {
+    innerElements.push_back(element);
 }
 
 void ScrollbarLayout::moveToWindowY(int y) {
@@ -94,7 +94,7 @@ void ScrollbarLayout::draw() {
     window->draw(*innerBackground);
     for(unsigned long i = 0; i < innerElements.size(); i++) {
         // printf("drawing inner?\n");
-        innerElements[i].first->draw();
+        innerElements[i]->draw();
     }
     window->setView(window->getDefaultView());
 }
@@ -121,8 +121,8 @@ void ScrollbarLayout::update(sf::Event* event, int mouseX, int mouseY) {
     float ty = mouseY - yMin - showLayoutSize / 2.0f + showYMin * 1.0f * actualLayoutSize / showLayoutSize;
     
     for(unsigned long i = 0; i < innerElements.size(); i++) {
-        innerElements[i].first->setEnabled(valid);
-        innerElements[i].first->update(event, tx, ty);
+        innerElements[i]->setEnabled(valid);
+        innerElements[i]->update(event, tx, ty);
     }
 }
 
@@ -134,7 +134,7 @@ void ScrollbarLayout::update() {
     }
     // if(checkInWinBounds(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
     for(unsigned long i = 0; i < innerElements.size(); i++) {
-        innerElements[i].first->update();
+        innerElements[i]->update();
     }
     // }
 }
@@ -157,9 +157,9 @@ ScrollbarLayout::~ScrollbarLayout(){
     delete view;
 
     //scrollbar layout trusted to manage inner elements, assumed it is not shared anywhere else
-    for(unsigned long i = 0; i < innerElements.size(); i++) {
-        if(innerElements[i].second) {
-            delete innerElements[i].first;
-        }
-    }
+    // for(unsigned long i = 0; i < innerElements.size(); i++) {
+    //     if(innerElements[i].second) {
+    //         delete innerElements[i].first;
+    //     }
+    // }
 }

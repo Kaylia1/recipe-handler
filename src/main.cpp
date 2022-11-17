@@ -14,7 +14,7 @@ int main() {
     
     WindowControl* winCtrl = new WindowControl();
 
-    FileManager* saveData = FileManager::newFileManager(winCtrl->getWindow(), "./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
+    std::shared_ptr<FileManager> saveData = FileManager::newFileManager(winCtrl->getWindow(), "./save-data/ingredient_costs.txt", "./save-data/recipes.txt");
     
     saveData->loadIngredients();
     saveData->loadRecipes();
@@ -29,7 +29,7 @@ int main() {
     saveData->writeIngredientsToFile();
     saveData->writeRecipesToFile();
 
-    delete saveData;
+    // delete saveData;
     delete winCtrl;
 
     return 0;

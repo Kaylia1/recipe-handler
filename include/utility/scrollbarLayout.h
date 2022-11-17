@@ -1,6 +1,7 @@
 #ifndef SCROLLBAR_LAYOUT
 #define SCROLLBAR_LAYOUT
 
+#include <memory>
 #include "element.h"
 // #include 
 // #include 
@@ -21,7 +22,7 @@ class ScrollbarLayout : public Element {
         float translateInnerElementX(int xRelative);
         float translateInnerElementY(int yRelative);
         float decodeInnerElementY(int yRelative);
-        void addInnerElement(Element *element, bool delWhenDone = true);
+        void addInnerElement(std::shared_ptr<Element> element);
         //TODO add functionality for relative coords
 
         virtual void draw();
@@ -54,7 +55,7 @@ class ScrollbarLayout : public Element {
 
         int width;
 
-        std::vector<std::pair<Element*, bool>> innerElements; //vector of inner element ptrs
+        std::vector<std::shared_ptr<Element>> innerElements; //vector of inner element ptrs
 
         sf::RectangleShape *scrollbar, *innerBackground;
         sf::View* view;

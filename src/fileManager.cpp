@@ -1,15 +1,17 @@
 #include "../include/fileManager.h"
 
-FileManager* FileManager::fileManager = nullptr;
+std::shared_ptr<FileManager> FileManager::fileManager = nullptr;
 
-FileManager* FileManager::newFileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath){
+
+
+std::shared_ptr<FileManager> FileManager::newFileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath){
     if(fileManager == nullptr) {
-        fileManager = new FileManager(window, ingredientPath, recipePath);
+        fileManager = std::make_shared<MakeSharedEnabler>(window, ingredientPath, recipePath);
     }
     return fileManager;
 }
 
-FileManager* FileManager::getFileManager() {
+std::shared_ptr<FileManager> FileManager::getFileManager() {
     return fileManager;
 }
 

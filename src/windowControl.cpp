@@ -63,7 +63,7 @@ void WindowControl::initMenu() {
     temp->setScrollbarLayout(scrollbar);
     
     FileManager::getFileManager()->displayRecipesInit(0, scrollbar->translateInnerElementY(50));
-    scrollbar->addInnerElement(FileManager::getFileManager(), false);
+    scrollbar->addInnerElement(FileManager::getFileManager());
 
     elements.push_back(new Button<WindowControl>(this, &WindowControl::setEditRecipeState, ADD_RECIPE, window, WIDTH - 175, HEIGHT - 175, WIDTH - 75, HEIGHT - 75));
     nextState = main;

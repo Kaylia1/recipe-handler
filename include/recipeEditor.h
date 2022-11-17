@@ -19,6 +19,7 @@ class RecipeEditor : public Element {
         static const int LINE_HEIGHT;
         static const int SPACING_HEIGHT;
         static const int MIN_X_INIT, MAX_X_INIT;
+        static const int MIN_X_INPUT, MAX_X_INPUT;
 
         RecipeEditor(sf::RenderWindow *window, int windowWidth, int windowHeight);
         void update(sf::Event *event, int mouseX, int mouseY);
@@ -45,9 +46,9 @@ class RecipeEditor : public Element {
 
         ScrollbarLayout recipeScrollbar;
         
-        std::vector<std::unique_ptr<TextInput>> enterIngredients;
-        std::vector<std::unique_ptr<TextInput>> enterInstructions;
-        std::vector<std::unique_ptr<TextInput>> enterNotes;
+        std::vector<std::shared_ptr<TextInput>> enterIngredients;
+        std::vector<std::shared_ptr<TextInput>> enterInstructions;
+        std::vector<std::shared_ptr<TextInput>> enterNotes;
 
         int ingredientY;
         int instructionY;

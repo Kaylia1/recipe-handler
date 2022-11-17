@@ -16,7 +16,7 @@ class RecipeTextInput : public TextInput {
         virtual ~RecipeTextInput();
     private:
         std::string lastText;
-        FileManager* fileManager;
+        std::shared_ptr<FileManager> fileManager;
         FileManager::RecipeHolder curSuggested;
         DropdownLayout* dropdownSuggestions;
         ScrollbarLayout* scrollWin;

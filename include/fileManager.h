@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 #include "divisibleIngredient.h"
 #include "wholeIngredient.h"
@@ -45,8 +46,10 @@ class FileManager : public Element {
         };
 
         //singleton class, can only create one instance
-        static FileManager* newFileManager(sf::RenderWindow* window, std::string ingredientPath, std::string recipePath);
-        static FileManager* getFileManager();
+        static std::shared_ptr<FileManager> newFileManager(sf::RenderWindow* window, std::string ingredientPath, std::string recipePath);
+        static std::shared_ptr<FileManager> getFileManager();
+
+        // FileManager();
 
         void loadIngredients(); //TODO bool return val
         void loadRecipes();
@@ -78,8 +81,9 @@ class FileManager : public Element {
 
         ~FileManager();
     private:
+        class MakeSharedEnabler;
 
-        static FileManager* fileManager;
+        static std::shared_ptr<FileManager> fileManager;
         FileManager(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath);
 
         // std::pair<Recipe*, int> referenceName;
@@ -90,5 +94,16 @@ class FileManager : public Element {
         // std::map<std::string, std::pair<Recipe*, RecipeDisplay*>> allRecipes; //todo make pair of recipe and recipeDisplay
         std::vector<std::pair<Recipe*, RecipeDisplay*>> allRecipes;
 };
+
+class FileManager::MakeSharedEnabler : public FileManager {
+    public:
+        MakeSharedEnabler(sf::RenderWindow *window, std::string ingredientPath, std::string recipePath) :
+            FileManager(window, ingredientPath, recipePath) {
+
+        };
+};
+
+
+
 
 #endif
